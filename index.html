@@ -7,6 +7,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   <title>Lock In Timer</title>
+  <!-- โหลดฟอนต์ตัวเลขยอดนิยมเผื่อมีอินเทอร์เน็ต (หากออฟไลน์จะสลับใช้ฟอนต์ในเครื่องอัตโนมัติ) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=JetBrains+Mono:wght@700;800&family=Orbitron:wght@700;800&family=Oswald:wght@700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #000000;
@@ -21,6 +25,7 @@
       --blue: #0a84ff;
       --purple: #bf5af2;
       --danger: #ff453a;
+      --timer-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     * {
@@ -59,6 +64,8 @@
       align-items: center;
       z-index: 10;
       transition: opacity 0.25s ease;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .brand {
@@ -113,6 +120,28 @@
       font-weight: 600;
     }
 
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .font-quick-select {
+      background: #111116;
+      border: 1px solid #272730;
+      color: #d1d1d6;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: inherit;
+      outline: none;
+    }
+    .font-quick-select:hover {
+      border-color: #484854;
+      color: #fff;
+    }
+
     .cloud-pill-btn {
       background: #111116;
       border: 1px solid #272730;
@@ -145,7 +174,7 @@
       background: var(--accent);
     }
 
-    /* Center Stage */
+    /* Center Stage & Zero-Jitter Timer */
     .center-stage {
       display: flex;
       flex-direction: column;
@@ -155,15 +184,65 @@
       width: 100%;
     }
 
+    /* โครงสร้างล็อกตำแหน่งตัวเลขทุกหลักไม่ให้สั่น 100% */
     .timer-digits {
-      font-size: clamp(78px, 19vw, 250px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--timer-font);
+      font-size: clamp(72px, 18.5vw, 248px);
       font-weight: 800;
       line-height: 1;
-      letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1, "zero" 1;
       color: #ffffff;
       cursor: pointer;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+
+    /* บังคับความกว้างของตัวเลขแต่ละหลักให้คงที่ตายตัว */
+    .digit-cell {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.63em;
+      text-align: center;
+      position: relative;
+      will-change: contents, opacity, transform;
+    }
+
+    /* ความกว้างของเครื่องหมาย : ล็อกตายตัว */
+    .colon-cell {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.28em;
+      text-align: center;
+      transform: translateY(-0.04em);
+      opacity: 0.92;
+    }
+
+    /* เอฟเฟกต์สมูทแบบไม่สั่นเมื่อตัวเลขเปลี่ยน */
+    @keyframes smoothTick {
+      0% {
+        opacity: 0.55;
+        filter: blur(0.6px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0px);
+      }
+    }
+    .digit-cell.smooth-change {
+      animation: smoothTick 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* ปรับระยะช่องตัวเลขสำหรับฟอนต์บางสไตล์ให้สมดุล */
+    body[data-font="tall"] .digit-cell { width: 0.52em; }
+    body[data-font="cyber"] .digit-cell { width: 0.74em; font-size: 0.88em; }
+    body[data-font="mono"] .digit-cell { width: 0.62em; }
 
     .aux-section {
       display: flex;
@@ -334,7 +413,7 @@
       border: 1px solid var(--border);
       border-radius: 22px;
       width: 100%;
-      max-width: 580px;
+      max-width: 600px;
       max-height: 92vh;
       overflow-y: auto;
       padding: 24px;
@@ -371,7 +450,6 @@
       color: #fff;
     }
 
-    /* Original Rich Settings Style */
     .section-label {
       font-size: 12px;
       color: var(--text-muted);
@@ -380,6 +458,46 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
+    /* Font Picker Grid in Settings */
+    .font-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 520px) {
+      .font-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .font-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .font-card:hover {
+      border-color: #555;
+    }
+    .font-card.active {
+      border-color: var(--accent);
+      background: rgba(255, 159, 10, 0.1);
+    }
+    .font-sample {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+    .font-name {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
     .preset-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -640,7 +758,7 @@
     }
   </style>
 </head>
-<body>
+<body data-font="default">
   <div class="app-shell">
     <!-- Top Bar -->
     <header class="top-bar">
@@ -656,15 +774,34 @@
         <button class="mode-btn" onclick="app.setPhase('custom')">อิสระ</button>
       </div>
 
-      <button class="cloud-pill-btn" onclick="app.openModal('cloud')">
-        <span id="syncDot" class="sync-dot"></span>
-        <span id="syncStatusText">ซิงก์ Cloud / สำรองข้อมูล</span>
-      </button>
+      <div class="top-actions">
+        <select id="quickFontSelect" class="font-quick-select" onchange="app.setFont(this.value)" title="เปลี่ยนฟอนต์ตัวเลข">
+          <option value="default">🔤 ฟอนต์: Modern Bold (ต้นฉบับ)</option>
+          <option value="mono">🔤 ฟอนต์: JetBrains Mono (โค้ดดิ้งนิ่งสนิท)</option>
+          <option value="space">🔤 ฟอนต์: Space Grotesk (โมเดิร์นเท่ๆ)</option>
+          <option value="tall">🔤 ฟอนต์: Oswald Tall (ทรงสูงสปอร์ต)</option>
+          <option value="cyber">🔤 ฟอนต์: Orbitron Digital (ดิจิทัลล้ำยุค)</option>
+          <option value="serif">🔤 ฟอนต์: Classic Serif (คลาสสิกหรูหรา)</option>
+        </select>
+
+        <button class="cloud-pill-btn" onclick="app.openModal('cloud')">
+          <span id="syncDot" class="sync-dot"></span>
+          <span id="syncStatusText">ซิงก์ Cloud</span>
+        </button>
+      </div>
     </header>
 
-    <!-- Center Timer -->
+    <!-- Center Stage: โครงสร้างแยกช่องตัวเลขป้องกันการขยับ/สั่น 100% -->
     <main class="center-stage">
-      <div id="timerDisplay" class="timer-digits" onclick="app.toggleTimer()" title="คลิกเพื่อเริ่มหรือหยุด">0:25:00</div>
+      <div id="timerDisplay" class="timer-digits" onclick="app.toggleTimer()" title="คลิกเพื่อเริ่มหรือหยุด">
+        <span class="digit-cell" id="d0">0</span>
+        <span class="colon-cell">:</span>
+        <span class="digit-cell" id="d1">2</span>
+        <span class="digit-cell" id="d2">5</span>
+        <span class="colon-cell">:</span>
+        <span class="digit-cell" id="d3">0</span>
+        <span class="digit-cell" id="d4">0</span>
+      </div>
 
       <div class="aux-section">
         <div id="statusLabel" class="status-text">พร้อมเริ่ม</div>
@@ -688,7 +825,7 @@
       <button id="startBtn" class="start-btn" onclick="app.toggleTimer()">เริ่ม</button>
       <nav class="sub-nav">
         <button onclick="app.resetTimer()">รีเซ็ต</button>
-        <button onclick="app.openModal('settings')">ตั้งเวลา</button>
+        <button onclick="app.openModal('settings')">ตั้งเวลา / ฟอนต์</button>
         <button onclick="app.openModal('stats')">สถิติ</button>
         <button onclick="app.openModal('plan')">แผน</button>
         <button onclick="app.toggleFocusMode()">โหมดโฟกัส</button>
@@ -698,12 +835,40 @@
 
   <button class="focus-exit-btn" onclick="app.toggleFocusMode()">ออกจากโหมดโฟกัส (Esc / F)</button>
 
-  <!-- Modal 1: ตั้งเวลาแบบเดิม (ครบทุกฟังก์ชัน: ชั่วโมง/นาที/วินาที + พรีเซ็ต + Pomodoro) -->
+  <!-- Modal 1: ตั้งเวลา + เลือกฟอนต์ + ตั้งความสมูท -->
   <div id="modal-settings" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>ตั้งเวลาและระบบ Pomodoro</h3>
+        <h3>ตั้งเวลาและสไตล์ตัวเลข</h3>
         <button class="close-btn" onclick="app.closeModals()">✕</button>
+      </div>
+
+      <div class="section-label">เลือกฟอนต์ตัวเลขจับเวลา (ล็อกตำแหน่งไม่สั่นทุกฟอนต์)</div>
+      <div class="font-grid" id="fontPickerGrid">
+        <div class="font-card active" data-font="default" onclick="app.setFont('default')">
+          <div class="font-sample" style="font-family:'Inter',sans-serif;">0:25:00</div>
+          <div class="font-name">Modern Bold</div>
+        </div>
+        <div class="font-card" data-font="mono" onclick="app.setFont('mono')">
+          <div class="font-sample" style="font-family:'JetBrains Mono',monospace;">0:25:00</div>
+          <div class="font-name">JetBrains Mono</div>
+        </div>
+        <div class="font-card" data-font="space" onclick="app.setFont('space')">
+          <div class="font-sample" style="font-family:'Space Grotesk',sans-serif;">0:25:00</div>
+          <div class="font-name">Space Grotesk</div>
+        </div>
+        <div class="font-card" data-font="tall" onclick="app.setFont('tall')">
+          <div class="font-sample" style="font-family:'Oswald',sans-serif;">0:25:00</div>
+          <div class="font-name">Oswald Tall</div>
+        </div>
+        <div class="font-card" data-font="cyber" onclick="app.setFont('cyber')">
+          <div class="font-sample" style="font-family:'Orbitron',sans-serif;font-size:16px;">0:25:00</div>
+          <div class="font-name">Orbitron Digital</div>
+        </div>
+        <div class="font-card" data-font="serif" onclick="app.setFont('serif')">
+          <div class="font-sample" style="font-family:Georgia,serif;">0:25:00</div>
+          <div class="font-name">Classic Serif</div>
+        </div>
       </div>
 
       <div class="section-label">พรีเซ็ตเวลาด่วน (โหมดอิสระ)</div>
@@ -754,6 +919,10 @@
         </div>
       </div>
 
+      <div class="toggle-row">
+        <span>เอฟเฟกต์เปลี่ยนตัวเลขแบบนุ่มนวล (Smooth Optical Fade)</span>
+        <input id="setSmoothTick" type="checkbox" checked>
+      </div>
       <div class="toggle-row">
         <span>เริ่มรอบถัดไปอัตโนมัติเมื่อหมดเวลา</span>
         <input id="setAutoStart" type="checkbox">
@@ -910,6 +1079,15 @@
   <script>
     const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 
+    const FONT_MAP = {
+      default: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      mono: "'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace",
+      space: "'Space Grotesk', 'Segoe UI', sans-serif",
+      tall: "'Oswald', 'Impact', 'Arial Narrow', sans-serif",
+      cyber: "'Orbitron', 'Courier New', monospace",
+      serif: "Georgia, 'Times New Roman', serif"
+    };
+
     const app = {
       state: {
         phase: 'focus',
@@ -926,12 +1104,15 @@
           maxRounds: 4,
           customSec: 25 * 60,
           autoStart: false,
-          sound: true
+          sound: true,
+          smoothTick: true,
+          fontKey: 'default'
         },
         tasks: [],
         stats: { history: {} },
         updatedAt: 0
       },
+      lastRenderedDigits: ['0', '2', '5', '0', '0'],
       calDate: new Date(),
       statsDate: new Date(),
       selectedDateKey: '',
@@ -943,6 +1124,7 @@
         this.selectedDateKey = this.toDateKey(new Date());
         this.loadLocal();
         this.loadCloudConfig();
+        this.applyFontToDOM(this.state.settings.fontKey || 'default');
         this.syncSettingsToInputs();
         this.setPhase('focus', false);
         this.renderCalendar();
@@ -975,6 +1157,23 @@
         window.addEventListener('focus', () => this.pullFromCloud(false));
       },
 
+      setFont(fontKey) {
+        if (!FONT_MAP[fontKey]) fontKey = 'default';
+        this.state.settings.fontKey = fontKey;
+        this.applyFontToDOM(fontKey);
+        this.saveData();
+      },
+
+      applyFontToDOM(fontKey) {
+        document.documentElement.style.setProperty('--timer-font', FONT_MAP[fontKey] || FONT_MAP.default);
+        document.body.setAttribute('data-font', fontKey);
+        const sel = document.getElementById('quickFontSelect');
+        if (sel) sel.value = fontKey;
+        document.querySelectorAll('#fontPickerGrid .font-card').forEach(card => {
+          card.classList.toggle('active', card.getAttribute('data-font') === fontKey);
+        });
+      },
+
       toDateKey(d) {
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, '0');
@@ -982,18 +1181,35 @@
         return `${y}-${m}-${day}`;
       },
 
-      formatTime(sec) {
+      formatTimeParts(sec) {
         const s = Math.max(0, Math.floor(sec));
-        const hrs = Math.floor(s / 3600);
+        const hrs = String(Math.floor(s / 3600));
         const mins = String(Math.floor((s % 3600) / 60)).padStart(2, '0');
         const secs = String(s % 60).padStart(2, '0');
-        return `${hrs}:${mins}:${secs}`;
+        return {
+          full: `${hrs}:${mins}:${secs}`,
+          digits: [hrs, mins[0], mins[1], secs[0], secs[1]]
+        };
       },
 
       updateDisplay() {
-        const str = this.formatTime(this.state.remainingSec);
-        document.getElementById('timerDisplay').textContent = str;
-        document.title = `${str} - Lock In Timer`;
+        const { full, digits } = this.formatTimeParts(this.state.remainingSec);
+        document.title = `${full} - Lock In Timer`;
+
+        // อัปเดตเฉพาะหลักที่เปลี่ยนในช่องความกว้างคงที่ ทำให้หลักอื่นนิ่งสนิท 100%
+        for (let i = 0; i < 5; i++) {
+          const el = document.getElementById(`d${i}`);
+          if (!el) continue;
+          if (el.textContent !== digits[i]) {
+            el.textContent = digits[i];
+            if (this.state.settings.smoothTick !== false && this.state.running) {
+              el.classList.remove('smooth-change');
+              void el.offsetWidth; // Reflow สำหรับเล่นแอนิเมชันสมูทใหม่เฉพาะหลักที่เปลี่ยน
+              el.classList.add('smooth-change');
+            }
+          }
+        }
+        this.lastRenderedDigits = digits;
 
         const maxR = this.state.settings.maxRounds || 4;
         const dotsEl = document.getElementById('pomoDots');
@@ -1044,11 +1260,11 @@
             this.state.remainingSec = 0;
             this.updateDisplay();
             this.completeSession(false);
-          } else {
+          } else if (diff !== this.state.remainingSec) {
             this.state.remainingSec = diff;
             this.updateDisplay();
           }
-        }, 250);
+        }, 100);
       },
 
       pauseTimer() {
@@ -1129,7 +1345,6 @@
         }
       },
 
-      /* Original Rich Settings Functions */
       syncSettingsToInputs() {
         const s = this.state.settings;
         const cSec = s.customSec || 1500;
@@ -1142,6 +1357,8 @@
         document.getElementById('setMaxRounds').value = s.maxRounds || 4;
         document.getElementById('setAutoStart').checked = !!s.autoStart;
         document.getElementById('setSoundOn').checked = s.sound !== false;
+        document.getElementById('setSmoothTick').checked = s.smoothTick !== false;
+        this.applyFontToDOM(s.fontKey || 'default');
       },
 
       applyQuickPreset(h, m, s) {
@@ -1173,6 +1390,7 @@
         this.state.settings.maxRounds = Math.max(1, parseInt(document.getElementById('setMaxRounds').value) || 4);
         this.state.settings.autoStart = document.getElementById('setAutoStart').checked;
         this.state.settings.sound = document.getElementById('setSoundOn').checked;
+        this.state.settings.smoothTick = document.getElementById('setSmoothTick').checked;
         this.saveData();
         this.setPhase(this.state.phase, true);
         this.closeModals();
@@ -1569,6 +1787,7 @@
             this.state.tasks = data.tasks || [];
             this.state.stats = data.stats || { history: {} };
             this.saveData();
+            this.syncSettingsToInputs();
             this.renderCalendar();
             this.renderTasks();
             this.renderStats();
