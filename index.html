@@ -10,9 +10,10 @@
   <style>
     :root {
       --bg: #000000;
-      --surface: #0c0c0e;
-      --surface-2: #16161a;
-      --border: #26262b;
+      --surface: #0b0b0e;
+      --surface-2: #141419;
+      --surface-3: #1c1c24;
+      --border: #24242c;
       --text: #ffffff;
       --text-muted: #8e8e93;
       --accent: #ff9f0a;
@@ -39,7 +40,7 @@
       overflow: hidden;
     }
 
-    .app-layout {
+    .app-shell {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -86,16 +87,16 @@
       border-radius: 50%;
     }
 
-    .mode-pills {
+    .mode-switcher {
       display: flex;
-      background: #0d0d10;
-      border: 1px solid #222227;
+      background: #0d0d11;
+      border: 1px solid #222229;
       border-radius: 999px;
       padding: 3px;
       gap: 4px;
     }
 
-    .mode-pill {
+    .mode-btn {
       background: transparent;
       border: none;
       color: var(--text-muted);
@@ -106,33 +107,28 @@
       transition: all 0.2s;
       font-family: inherit;
     }
-    .mode-pill.active {
-      background: #242429;
+    .mode-btn.active {
+      background: #24242c;
       color: #ffffff;
       font-weight: 600;
     }
 
-    .top-right-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .cloud-btn {
-      background: #111115;
-      border: 1px solid #27272c;
+    .cloud-pill-btn {
+      background: #111116;
+      border: 1px solid #272730;
       color: #d1d1d6;
       font-size: 12px;
-      padding: 6px 12px;
+      padding: 6px 13px;
       border-radius: 999px;
       cursor: pointer;
       font-family: inherit;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      transition: border-color 0.2s;
     }
-    .cloud-btn:hover {
-      border-color: #444;
+    .cloud-pill-btn:hover {
+      border-color: #484854;
       color: #fff;
     }
     .sync-dot {
@@ -149,7 +145,7 @@
       background: var(--accent);
     }
 
-    /* Center Section */
+    /* Center Stage */
     .center-stage {
       display: flex;
       flex-direction: column;
@@ -167,10 +163,9 @@
       font-variant-numeric: tabular-nums;
       color: #ffffff;
       cursor: pointer;
-      transition: transform 0.2s ease;
     }
 
-    .aux-ui {
+    .aux-section {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -179,12 +174,12 @@
       transition: opacity 0.25s ease;
     }
 
-    .status-label {
+    .status-text {
       font-size: 14px;
       color: var(--text-muted);
     }
 
-    .pomo-dots-row {
+    .pomo-row {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -195,7 +190,7 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #2c2c30;
+      background: #2c2c34;
     }
     .pomo-dot.active {
       background: var(--accent);
@@ -209,8 +204,8 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #0b0b0d;
-      border: 1px solid #232328;
+      background: #0b0b0e;
+      border: 1px solid #23232b;
       border-radius: 999px;
       padding: 9px 20px;
       font-size: 13px;
@@ -224,11 +219,11 @@
       font-family: inherit;
       font-size: 13px;
     }
-    .banner-link {
+    .banner-open {
       color: var(--accent);
       font-weight: 600;
     }
-    .banner-dismiss {
+    .banner-later {
       color: #636366;
     }
 
@@ -242,7 +237,7 @@
       transition: opacity 0.25s ease;
     }
 
-    .main-start-btn {
+    .start-btn {
       width: 246px;
       height: 46px;
       border-radius: 999px;
@@ -255,13 +250,13 @@
       font-family: inherit;
       transition: transform 0.12s ease, background 0.2s;
     }
-    .main-start-btn:active {
+    .start-btn:active {
       transform: scale(0.97);
     }
-    .main-start-btn.running {
-      background: #1c1c21;
+    .start-btn.running {
+      background: #18181f;
       color: #ffffff;
-      border: 1px solid #33333a;
+      border: 1px solid #32323c;
     }
 
     .sub-nav {
@@ -283,28 +278,26 @@
       color: #ffffff;
     }
 
-    /* PURE FOCUS MODE: เหลือแค่ตัวเลขเวลาล้วนๆ */
+    /* PURE FOCUS MODE */
     body.pure-focus .top-bar,
-    body.pure-focus .aux-ui,
+    body.pure-focus .aux-section,
     body.pure-focus .bottom-bar {
       opacity: 0 !important;
       pointer-events: none !important;
       display: none !important;
     }
-    body.pure-focus.hide-cursor {
-      cursor: none !important;
-    }
+    body.pure-focus.hide-cursor,
     body.pure-focus.hide-cursor * {
       cursor: none !important;
     }
 
-    .focus-exit-hint {
+    .focus-exit-btn {
       position: fixed;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(20, 20, 24, 0.85);
-      border: 1px solid #2c2c32;
+      background: rgba(20, 20, 26, 0.88);
+      border: 1px solid #2e2e38;
       color: #a1a1aa;
       font-size: 12px;
       padding: 7px 16px;
@@ -315,7 +308,7 @@
       transition: opacity 0.25s;
       z-index: 50;
     }
-    body.pure-focus:not(.hide-cursor) .focus-exit-hint {
+    body.pure-focus:not(.hide-cursor) .focus-exit-btn {
       opacity: 1;
       pointer-events: auto;
     }
@@ -324,8 +317,8 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.82);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.84);
+      backdrop-filter: blur(10px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -339,16 +332,17 @@
     .modal-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 22px;
       width: 100%;
-      max-width: 520px;
-      max-height: 90vh;
+      max-width: 580px;
+      max-height: 92vh;
       overflow-y: auto;
-      padding: 22px;
+      padding: 24px;
       color: var(--text);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.8);
     }
     .modal-card.wide {
-      max-width: 960px;
+      max-width: 980px;
     }
 
     .modal-header {
@@ -356,57 +350,215 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 18px;
-      padding-bottom: 12px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--border);
     }
     .modal-header h3 {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 700;
     }
     .close-btn {
-      background: #1c1c21;
-      border: none;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
       color: #aaa;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 15px;
+      font-size: 14px;
+    }
+    .close-btn:hover {
+      color: #fff;
     }
 
-    /* Calendar Layout */
-    .planner-grid {
+    /* Original Rich Settings Style */
+    .section-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .preset-grid {
       display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
     }
-    @media (max-width: 760px) {
-      .planner-grid {
-        grid-template-columns: 1fr;
-      }
+    .preset-chip {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: #e5e5ea;
+      padding: 10px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .preset-chip:hover {
+      border-color: var(--accent);
+      color: #fff;
     }
 
-    .cal-header {
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .field-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-box span {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .field-box input {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 700;
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+    }
+
+    .toggle-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      padding: 11px 14px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      font-size: 13px;
     }
-    .cal-nav-btns {
-      display: flex;
-      gap: 6px;
+    .toggle-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
     }
     .btn-sm {
       background: var(--surface-2);
       border: 1px solid var(--border);
       color: #fff;
-      padding: 5px 10px;
-      border-radius: 8px;
+      padding: 6px 12px;
+      border-radius: 9px;
       font-size: 12px;
       cursor: pointer;
       font-family: inherit;
     }
+    .btn-sm:hover {
+      border-color: #484854;
+    }
 
+    /* Stats Monthly Line Chart */
+    .stats-month-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+    .stats-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    @media (max-width: 640px) {
+      .stats-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .kpi-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .kpi-val {
+      font-size: 24px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    .chart-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 16px 12px;
+      position: relative;
+    }
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #d1d1d6;
+    }
+    .svg-chart-wrap {
+      width: 100%;
+      height: 230px;
+      position: relative;
+    }
+    .chart-tooltip {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Calendar & Planner */
+    .planner-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 780px) {
+      .planner-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     .cal-weekdays, .cal-days {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -420,8 +572,8 @@
     }
     .cal-day {
       aspect-ratio: 1;
-      background: #121216;
-      border: 1px solid #1f1f24;
+      background: #121217;
+      border: 1px solid #1f1f27;
       border-radius: 10px;
       padding: 6px;
       cursor: pointer;
@@ -434,11 +586,11 @@
       border-color: var(--accent);
     }
     .cal-day.selected {
-      background: #23232b;
+      background: #23232e;
       border-color: #ffffff;
     }
     .cal-day.other-month {
-      opacity: 0.3;
+      opacity: 0.28;
     }
     .day-dots {
       display: flex;
@@ -451,15 +603,8 @@
       border-radius: 50%;
     }
 
-    /* Forms & Lists */
-    .form-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-    }
     .input, select {
-      background: #141418;
+      background: var(--surface-2);
       border: 1px solid var(--border);
       color: #fff;
       padding: 9px 12px;
@@ -471,23 +616,11 @@
     .input:focus {
       border-color: var(--accent);
     }
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      padding: 9px 16px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
     .task-list {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 300px;
+      max-height: 310px;
       overflow-y: auto;
       margin-top: 12px;
     }
@@ -495,32 +628,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #141418;
-      border: 1px solid #232329;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
       padding: 10px 12px;
-      border-radius: 10px;
+      border-radius: 11px;
       gap: 8px;
     }
     .task-item.done .task-title {
       text-decoration: line-through;
       color: var(--text-muted);
     }
-    .task-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex: 1;
-    }
-    .cat-tag {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
   </style>
 </head>
 <body>
-  <div class="app-layout">
+  <div class="app-shell">
     <!-- Top Bar -->
     <header class="top-bar">
       <div class="brand">
@@ -528,29 +649,27 @@
         <span>Lock In Timer</span>
       </div>
 
-      <div class="mode-pills">
-        <button class="mode-pill active" onclick="app.setPhase('focus')">โฟกัส</button>
-        <button class="mode-pill" onclick="app.setPhase('short')">พักสั้น</button>
-        <button class="mode-pill" onclick="app.setPhase('long')">พักยาว</button>
-        <button class="mode-pill" onclick="app.setPhase('custom')">อิสระ</button>
+      <div class="mode-switcher">
+        <button class="mode-btn active" onclick="app.setPhase('focus')">โฟกัส</button>
+        <button class="mode-btn" onclick="app.setPhase('short')">พักสั้น</button>
+        <button class="mode-btn" onclick="app.setPhase('long')">พักยาว</button>
+        <button class="mode-btn" onclick="app.setPhase('custom')">อิสระ</button>
       </div>
 
-      <div class="top-right-actions">
-        <button class="cloud-btn" onclick="app.openModal('cloud')">
-          <span id="syncDot" class="sync-dot"></span>
-          <span id="syncStatusText">ซิงก์ Cloud / สำรองข้อมูล</span>
-        </button>
-      </div>
+      <button class="cloud-pill-btn" onclick="app.openModal('cloud')">
+        <span id="syncDot" class="sync-dot"></span>
+        <span id="syncStatusText">ซิงก์ Cloud / สำรองข้อมูล</span>
+      </button>
     </header>
 
     <!-- Center Timer -->
     <main class="center-stage">
-      <div id="timerDisplay" class="timer-digits" onclick="app.toggleTimer()" title="คลิกเพื่อเริ่ม/หยุด">0:25:00</div>
+      <div id="timerDisplay" class="timer-digits" onclick="app.toggleTimer()" title="คลิกเพื่อเริ่มหรือหยุด">0:25:00</div>
 
-      <div class="aux-ui">
-        <div id="statusLabel" class="status-label">พร้อมเริ่ม</div>
+      <div class="aux-section">
+        <div id="statusLabel" class="status-text">พร้อมเริ่ม</div>
 
-        <div class="pomo-dots-row">
+        <div class="pomo-row">
           <div id="pomoDots" style="display:flex;gap:6px;"></div>
           <span id="pomoRoundText">รอบ 1/4</span>
           <button class="btn-sm" style="padding:2px 8px;font-size:11px;" onclick="app.skipPhase()">ข้าม →</button>
@@ -558,15 +677,15 @@
 
         <div id="planBanner" class="banner-pill">
           <span id="bannerText">พรุ่งนี้จะทำอะไรบ้าง? วางแผนไว้ก่อนนอน</span>
-          <button class="banner-link" onclick="app.openModal('plan')">เปิดแผน</button>
-          <button class="banner-dismiss" onclick="document.getElementById('planBanner').style.display='none'">ไว้ทีหลัง</button>
+          <button class="banner-open" onclick="app.openModal('plan')">เปิดแผน</button>
+          <button class="banner-later" onclick="document.getElementById('planBanner').style.display='none'">ไว้ทีหลัง</button>
         </div>
       </div>
     </main>
 
-    <!-- Bottom Bar -->
+    <!-- Bottom Controls -->
     <footer class="bottom-bar">
-      <button id="startBtn" class="main-start-btn" onclick="app.toggleTimer()">เริ่ม</button>
+      <button id="startBtn" class="start-btn" onclick="app.toggleTimer()">เริ่ม</button>
       <nav class="sub-nav">
         <button onclick="app.resetTimer()">รีเซ็ต</button>
         <button onclick="app.openModal('settings')">ตั้งเวลา</button>
@@ -577,41 +696,147 @@
     </footer>
   </div>
 
-  <button class="focus-exit-hint" onclick="app.toggleFocusMode()">ออกจากโหมดโฟกัส (Esc / F)</button>
+  <button class="focus-exit-btn" onclick="app.toggleFocusMode()">ออกจากโหมดโฟกัส (Esc / F)</button>
 
-  <!-- Modal: ตั้งเวลา -->
+  <!-- Modal 1: ตั้งเวลาแบบเดิม (ครบทุกฟังก์ชัน: ชั่วโมง/นาที/วินาที + พรีเซ็ต + Pomodoro) -->
   <div id="modal-settings" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>ตั้งเวลา Pomodoro</h3>
+        <h3>ตั้งเวลาและระบบ Pomodoro</h3>
         <button class="close-btn" onclick="app.closeModals()">✕</button>
       </div>
-      <div class="form-row" style="flex-direction:column;gap:12px;">
-        <label>เวลาโฟกัส (นาที): <input id="setFocusMin" type="number" class="input" style="width:100%;margin-top:4px;" value="25"></label>
-        <label>เวลาพักสั้น (นาที): <input id="setShortMin" type="number" class="input" style="width:100%;margin-top:4px;" value="5"></label>
-        <label>เวลาพักยาว (นาที): <input id="setLongMin" type="number" class="input" style="width:100%;margin-top:4px;" value="15"></label>
-        <label>เวลาโหมดอิสระ (นาที): <input id="setCustomMin" type="number" class="input" style="width:100%;margin-top:4px;" value="45"></label>
-        <button class="btn-primary" onclick="app.saveSettings()">บันทึกการตั้งค่า</button>
+
+      <div class="section-label">พรีเซ็ตเวลาด่วน (โหมดอิสระ)</div>
+      <div class="preset-grid">
+        <button class="preset-chip" onclick="app.applyQuickPreset(0, 15, 0)">15 นาที</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(0, 25, 0)">25 นาที</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(0, 45, 0)">45 นาที</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(0, 50, 0)">50 นาที</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(1, 0, 0)">1 ชั่วโมง</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(1, 30, 0)">1.5 ชั่วโมง</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(2, 0, 0)">2 ชั่วโมง</button>
+        <button class="preset-chip" onclick="app.applyQuickPreset(3, 0, 0)">3 ชั่วโมง</button>
+      </div>
+
+      <div class="section-label">กำหนดเวลาเองละเอียด (ชั่วโมง : นาที : วินาที)</div>
+      <div class="grid-3">
+        <div class="field-box">
+          <span>ชั่วโมง</span>
+          <input id="customHrs" type="number" min="0" max="23" value="0">
+        </div>
+        <div class="field-box">
+          <span>นาที</span>
+          <input id="customMins" type="number" min="0" max="59" value="25">
+        </div>
+        <div class="field-box">
+          <span>วินาที</span>
+          <input id="customSecs" type="number" min="0" max="59" value="0">
+        </div>
+      </div>
+
+      <div class="section-label">ตั้งค่ารอบ Pomodoro (นาที)</div>
+      <div class="grid-2">
+        <div class="field-box">
+          <span>เวลาโฟกัส (นาที)</span>
+          <input id="setFocusMin" type="number" min="1" max="240" value="25">
+        </div>
+        <div class="field-box">
+          <span>พักสั้น (นาที)</span>
+          <input id="setShortMin" type="number" min="1" max="60" value="5">
+        </div>
+        <div class="field-box">
+          <span>พักยาว (นาที)</span>
+          <input id="setLongMin" type="number" min="1" max="90" value="15">
+        </div>
+        <div class="field-box">
+          <span>จำนวนรอบก่อนพักยาว</span>
+          <input id="setMaxRounds" type="number" min="1" max="12" value="4">
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <span>เริ่มรอบถัดไปอัตโนมัติเมื่อหมดเวลา</span>
+        <input id="setAutoStart" type="checkbox">
+      </div>
+      <div class="toggle-row" style="margin-bottom:16px;">
+        <span>เปิดเสียงแจ้งเตือนเมื่อหมดเวลา</span>
+        <input id="setSoundOn" type="checkbox" checked>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <button class="btn-sm" style="padding:11px;font-weight:600;" onclick="app.useCustomTimerNow()">ใช้เวลา ชม.:นาที:วินาที ทันที</button>
+        <button class="btn-primary" onclick="app.saveSettings()">บันทึกการตั้งค่าทั้งหมด</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal: ปฏิทินวางแผนระยะยาว -->
+  <!-- Modal 2: สถิติรายเดือน + กราฟเส้นย้อนดูได้ทุกเดือน -->
+  <div id="modal-stats" class="modal-backdrop">
+    <div class="modal-card wide">
+      <div class="modal-header">
+        <h3>สถิติการโฟกัสรายเดือน (กราฟเส้น)</h3>
+        <button class="close-btn" onclick="app.closeModals()">✕</button>
+      </div>
+
+      <div class="stats-month-bar">
+        <div style="display:flex;gap:6px;">
+          <button class="btn-sm" onclick="app.changeStatsMonth(-12)">« ปีก่อน</button>
+          <button class="btn-sm" onclick="app.changeStatsMonth(-1)">◀ เดือนก่อน</button>
+        </div>
+        <strong id="statsMonthTitle" style="font-size:16px;color:var(--accent);">พฤศจิกายน 2026</strong>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-sm" onclick="app.resetStatsMonthToday()">เดือนปัจจุบัน</button>
+          <button class="btn-sm" onclick="app.changeStatsMonth(1)">เดือนถัดไป ▶</button>
+          <button class="btn-sm" onclick="app.changeStatsMonth(12)">ปีถัดไป »</button>
+        </div>
+      </div>
+
+      <div class="stats-kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">โฟกัสวันนี้</div>
+          <div id="statTodayMin" class="kpi-val" style="color:var(--accent);">0 นาที</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">รวมทั้งเดือนนี้</div>
+          <div id="statMonthTotal" class="kpi-val">0 นาที</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">เฉลี่ยต่อวัน (เดือนนี้)</div>
+          <div id="statMonthAvg" class="kpi-val" style="color:var(--green);">0 นาที</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">วันที่โฟกัสสูงสุดในเดือน</div>
+          <div id="statMonthPeak" class="kpi-val" style="color:var(--blue);">0 นาที</div>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-header">
+          <span>กราฟเส้นเวลาโฟกัสรายวัน (นาที)</span>
+          <span id="chartHoverInfo" class="chart-tooltip">ชี้ที่จุดบนกราฟเพื่อดูเวลาของแต่ละวัน</span>
+        </div>
+        <div id="lineChartContainer" class="svg-chart-wrap"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: ปฏิทินวางแผนชีวิตระยะยาว -->
   <div id="modal-plan" class="modal-backdrop">
     <div class="modal-card wide">
       <div class="modal-header">
-        <h3>ปฏิทินตารางชีวิตระยะยาว</h3>
+        <h3>ปฏิทินวางแผนตารางชีวิตระยะยาว</h3>
         <button class="close-btn" onclick="app.closeModals()">✕</button>
       </div>
       <div class="planner-grid">
-        <!-- Calendar Left -->
         <div>
-          <div class="cal-header">
-            <strong id="calMonthTitle">พฤศจิกายน 2026</strong>
-            <div class="cal-nav-btns">
-              <button class="btn-sm" onclick="app.changeMonth(-1)">◀ เดือนก่อน</button>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <strong id="calMonthTitle" style="font-size:16px;">พฤศจิกายน 2026</strong>
+            <div style="display:flex;gap:5px;">
+              <button class="btn-sm" onclick="app.changeCalMonth(-12)">-1 ปี</button>
+              <button class="btn-sm" onclick="app.changeCalMonth(-1)">◀</button>
               <button class="btn-sm" onclick="app.selectToday()">วันนี้</button>
-              <button class="btn-sm" onclick="app.changeMonth(1)">เดือนถัดไป ▶</button>
+              <button class="btn-sm" onclick="app.changeCalMonth(1)">▶</button>
+              <button class="btn-sm" onclick="app.changeCalMonth(12)">+1 ปี</button>
             </div>
           </div>
           <div class="cal-weekdays">
@@ -620,27 +845,27 @@
           <div id="calDaysGrid" class="cal-days"></div>
         </div>
 
-        <!-- Schedule Right -->
         <div>
-          <div style="margin-bottom:10px;font-weight:700;" id="selectedDateTitle">ตารางงาน</div>
-          <div class="form-row">
-            <input id="taskTime" type="time" class="input" value="09:00" style="width:110px;">
-            <input id="taskTitle" type="text" class="input" placeholder="สิ่งที่ต้องทำ / อ่านวิชา..." style="flex:1;">
+          <div id="selectedDateTitle" style="margin-bottom:10px;font-weight:700;color:var(--accent);">ตารางงาน</div>
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <input id="taskTime" type="time" class="input" value="09:00" style="width:115px;">
+            <input id="taskTitle" type="text" class="input" placeholder="เพิ่มตารางเรียน / อ่านหนังสือ / โจทย์..." style="flex:1;">
           </div>
-          <div class="form-row">
+          <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
             <select id="taskCat" class="input">
               <option value="#ff9f0a">🟠 เรียน / โจทย์</option>
               <option value="#30d158">🟢 ออกกำลังกาย / สุขภาพ</option>
               <option value="#0a84ff">🔵 กิจวัตรประจำวัน</option>
-              <option value="#bf5af2">🟣 เป้าหมายสำคัญ</option>
+              <option value="#bf5af2">🟣 เป้าหมายใหญ่</option>
             </select>
             <select id="taskRepeat" class="input">
               <option value="none">เฉพาะวันนี้</option>
-              <option value="daily">ทำซ้ำทุกวัน</option>
+              <option value="daily">ทุกวัน (กิจวัตร)</option>
               <option value="weekdays">จันทร์ - ศุกร์</option>
               <option value="weekends">เสาร์ - อาทิตย์</option>
+              <option value="weekly">ทุกสัปดาห์ (วันเดียวกัน)</option>
             </select>
-            <button class="btn-primary" onclick="app.addTask()">+ เพิ่มแผน</button>
+            <button class="btn-primary" style="width:auto;padding:9px 16px;" onclick="app.addTask()">+ เพิ่มแผน</button>
           </div>
           <div id="taskList" class="task-list"></div>
         </div>
@@ -648,40 +873,20 @@
     </div>
   </div>
 
-  <!-- Modal: สถิติ -->
-  <div id="modal-stats" class="modal-backdrop">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>สถิติการโฟกัส</h3>
-        <button class="close-btn" onclick="app.closeModals()">✕</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:center;">
-        <div style="background:#141418;padding:18px;border-radius:14px;">
-          <div style="font-size:12px;color:#8e8e93;">โฟกัสวันนี้ (นาที)</div>
-          <div id="statTodayMin" style="font-size:32px;font-weight:800;margin-top:6px;color:var(--accent);">0</div>
-        </div>
-        <div style="background:#141418;padding:18px;border-radius:14px;">
-          <div style="font-size:12px;color:#8e8e93;">โฟกัสสะสมทั้งหมด (นาที)</div>
-          <div id="statTotalMin" style="font-size:32px;font-weight:800;margin-top:6px;">0</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Cloud Sync & Backup -->
+  <!-- Modal 4: Cloud Sync & Backup -->
   <div id="modal-cloud" class="modal-backdrop">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>☁️ ตั้งค่า Cloud Sync อัตโนมัติ (เชื่อมคอม + แท็บเล็ต)</h3>
+        <h3>☁️ ซิงก์ข้อมูล Cloud อัตโนมัติ (คอม + แท็บเล็ต)</h3>
         <button class="close-btn" onclick="app.closeModals()">✕</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;line-height:1.5;">
-        <p style="color:#a1a1aa;">วางลิงก์ <b>Firebase Realtime Database URL</b> และตั้ง <b>รหัสห้องส่วนตัว</b> ให้เหมือนกันทั้งในคอมและแท็บเล็ต ข้อมูลจะซิงก์หากันอัตโนมัติทันที</p>
+        <p style="color:#a1a1aa;">ใส่ลิงก์ <b>Firebase Realtime Database URL</b> และตั้ง <b>รหัสซิงก์ส่วนตัว</b> ให้ตรงกันทั้งในคอมพิวเตอร์และแท็บเล็ต</p>
         <label>1. Firebase Database URL:
-          <input id="cloudDbUrl" type="text" class="input" style="width:100%;margin-top:4px;" placeholder="https://ชื่อโปรเจกต์-default-rtdb.asia-southeast1.firebasedatabase.app">
+          <input id="cloudDbUrl" type="text" class="input" style="width:100%;margin-top:4px;" placeholder="https://timer-c80ae-default-rtdb.asia-southeast1.firebasedatabase.app">
         </label>
-        <label>2. รหัสซิงก์ส่วนตัว (ตั้งเอง เช่น ชื่อเล่น+รหัสลับ):
-          <input id="cloudRoomKey" type="text" class="input" style="width:100%;margin-top:4px;" placeholder="เช่น thinnakon_secret_99">
+        <label>2. รหัสซิงก์ส่วนตัว (ตั้งเอง):
+          <input id="cloudRoomKey" type="text" class="input" style="width:100%;margin-top:4px;" placeholder="เช่น thinnakon_room_1">
         </label>
         <div style="display:flex;gap:8px;margin-top:4px;">
           <button class="btn-primary" style="flex:1;" onclick="app.saveCloudConfig()">เชื่อมต่อและซิงก์ทันที</button>
@@ -703,38 +908,47 @@
   </div>
 
   <script>
+    const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
     const app = {
       state: {
         phase: 'focus',
         round: 1,
-        maxRounds: 4,
         running: false,
         remainingSec: 25 * 60,
         endTime: null,
         activeTaskTitle: '',
         focusMode: false,
-        settings: { focus: 25, short: 5, long: 15, custom: 45 },
-        tasks: [], // { id, title, time, cat, repeat, dateKey, doneDates: [] }
-        stats: { history: {} }, // { 'YYYY-MM-DD': minutes }
+        settings: {
+          focus: 25,
+          short: 5,
+          long: 15,
+          maxRounds: 4,
+          customSec: 25 * 60,
+          autoStart: false,
+          sound: true
+        },
+        tasks: [],
+        stats: { history: {} },
         updatedAt: 0
       },
       calDate: new Date(),
+      statsDate: new Date(),
       selectedDateKey: '',
       timerInterval: null,
       cursorTimeout: null,
-      syncTimer: null,
       cloud: { url: '', key: '' },
 
       init() {
         this.selectedDateKey = this.toDateKey(new Date());
         this.loadLocal();
         this.loadCloudConfig();
+        this.syncSettingsToInputs();
         this.setPhase('focus', false);
         this.renderCalendar();
         this.renderTasks();
         this.renderStats();
 
-        // ซ่อนเมาส์อัตโนมัติในโหมดโฟกัส
         const wakeCursor = () => {
           if (!this.state.focusMode) return;
           document.body.classList.remove('hide-cursor');
@@ -746,7 +960,6 @@
         window.addEventListener('mousemove', wakeCursor);
         window.addEventListener('touchstart', wakeCursor);
 
-        // คีย์ลัด
         window.addEventListener('keydown', (e) => {
           if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
           if (e.code === 'Space') { e.preventDefault(); this.toggleTimer(); }
@@ -758,7 +971,6 @@
           }
         });
 
-        // ดึงข้อมูล Cloud อัตโนมัติทุก 12 วินาที และเมื่อสลับกลับมาเปิดหน้าจอ
         setInterval(() => this.pullFromCloud(false), 12000);
         window.addEventListener('focus', () => this.pullFromCloud(false));
       },
@@ -783,24 +995,28 @@
         document.getElementById('timerDisplay').textContent = str;
         document.title = `${str} - Lock In Timer`;
 
-        // Pomo Dots
+        const maxR = this.state.settings.maxRounds || 4;
         const dotsEl = document.getElementById('pomoDots');
         dotsEl.innerHTML = '';
-        for (let i = 1; i <= this.state.maxRounds; i++) {
+        for (let i = 1; i <= maxR; i++) {
           const d = document.createElement('div');
           d.className = 'pomo-dot' + (i < this.state.round ? ' done' : (i === this.state.round ? ' active' : ''));
           dotsEl.appendChild(d);
         }
-        document.getElementById('pomoRoundText').textContent = `รอบ ${this.state.round}/${this.state.maxRounds}`;
+        document.getElementById('pomoRoundText').textContent = `รอบ ${this.state.round}/${maxR}`;
       },
 
       setPhase(phase, resetRun = true) {
         if (resetRun) this.pauseTimer();
         this.state.phase = phase;
-        const mins = this.state.settings[phase] || 25;
-        this.state.remainingSec = mins * 60;
+        if (phase === 'custom') {
+          this.state.remainingSec = this.state.settings.customSec || 1500;
+        } else {
+          const mins = this.state.settings[phase] || 25;
+          this.state.remainingSec = mins * 60;
+        }
 
-        document.querySelectorAll('.mode-pill').forEach((btn, idx) => {
+        document.querySelectorAll('.mode-btn').forEach((btn, idx) => {
           const map = ['focus', 'short', 'long', 'custom'];
           btn.classList.toggle('active', map[idx] === phase);
         });
@@ -827,7 +1043,7 @@
           if (diff <= 0) {
             this.state.remainingSec = 0;
             this.updateDisplay();
-            this.completeSession();
+            this.completeSession(false);
           } else {
             this.state.remainingSec = diff;
             this.updateDisplay();
@@ -854,16 +1070,21 @@
 
       completeSession(skipped = false) {
         this.pauseTimer();
-        this.beep();
+        if (this.state.settings.sound) this.beep();
+
         if (!skipped && (this.state.phase === 'focus' || this.state.phase === 'custom')) {
-          const mins = this.state.settings[this.state.phase] || 25;
+          const earnedMin = this.state.phase === 'custom'
+            ? Math.max(1, Math.round((this.state.settings.customSec || 1500) / 60))
+            : (this.state.settings.focus || 25);
           const today = this.toDateKey(new Date());
-          this.state.stats.history[today] = (this.state.stats.history[today] || 0) + mins;
+          this.state.stats.history[today] = (this.state.stats.history[today] || 0) + earnedMin;
           this.saveData();
           this.renderStats();
         }
+
+        const maxR = this.state.settings.maxRounds || 4;
         if (this.state.phase === 'focus') {
-          if (this.state.round < this.state.maxRounds) {
+          if (this.state.round < maxR) {
             this.state.round++;
             this.setPhase('short');
           } else {
@@ -873,6 +1094,10 @@
         } else {
           this.setPhase('focus');
         }
+
+        if (this.state.settings.autoStart && !skipped) {
+          this.startTimer();
+        }
       },
 
       beep() {
@@ -881,11 +1106,11 @@
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
           osc.frequency.value = 880;
-          gain.gain.value = 0.15;
+          gain.gain.value = 0.16;
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start();
-          setTimeout(() => { osc.stop(); ctx.close(); }, 350);
+          setTimeout(() => { osc.stop(); ctx.close(); }, 380);
         } catch (e) {}
       },
 
@@ -904,8 +1129,161 @@
         }
       },
 
+      /* Original Rich Settings Functions */
+      syncSettingsToInputs() {
+        const s = this.state.settings;
+        const cSec = s.customSec || 1500;
+        document.getElementById('customHrs').value = Math.floor(cSec / 3600);
+        document.getElementById('customMins').value = Math.floor((cSec % 3600) / 60);
+        document.getElementById('customSecs').value = cSec % 60;
+        document.getElementById('setFocusMin').value = s.focus || 25;
+        document.getElementById('setShortMin').value = s.short || 5;
+        document.getElementById('setLongMin').value = s.long || 15;
+        document.getElementById('setMaxRounds').value = s.maxRounds || 4;
+        document.getElementById('setAutoStart').checked = !!s.autoStart;
+        document.getElementById('setSoundOn').checked = s.sound !== false;
+      },
+
+      applyQuickPreset(h, m, s) {
+        document.getElementById('customHrs').value = h;
+        document.getElementById('customMins').value = m;
+        document.getElementById('customSecs').value = s;
+        this.useCustomTimerNow();
+      },
+
+      useCustomTimerNow() {
+        const h = Math.max(0, parseInt(document.getElementById('customHrs').value) || 0);
+        const m = Math.max(0, parseInt(document.getElementById('customMins').value) || 0);
+        const s = Math.max(0, parseInt(document.getElementById('customSecs').value) || 0);
+        const total = Math.max(1, h * 3600 + m * 60 + s);
+        this.state.settings.customSec = total;
+        this.saveData();
+        this.setPhase('custom', true);
+        this.closeModals();
+      },
+
+      saveSettings() {
+        const h = Math.max(0, parseInt(document.getElementById('customHrs').value) || 0);
+        const m = Math.max(0, parseInt(document.getElementById('customMins').value) || 0);
+        const s = Math.max(0, parseInt(document.getElementById('customSecs').value) || 0);
+        this.state.settings.customSec = Math.max(1, h * 3600 + m * 60 + s);
+        this.state.settings.focus = Math.max(1, parseInt(document.getElementById('setFocusMin').value) || 25);
+        this.state.settings.short = Math.max(1, parseInt(document.getElementById('setShortMin').value) || 5);
+        this.state.settings.long = Math.max(1, parseInt(document.getElementById('setLongMin').value) || 15);
+        this.state.settings.maxRounds = Math.max(1, parseInt(document.getElementById('setMaxRounds').value) || 4);
+        this.state.settings.autoStart = document.getElementById('setAutoStart').checked;
+        this.state.settings.sound = document.getElementById('setSoundOn').checked;
+        this.saveData();
+        this.setPhase(this.state.phase, true);
+        this.closeModals();
+      },
+
+      /* Monthly Line Chart Statistics */
+      changeStatsMonth(offset) {
+        this.statsDate.setMonth(this.statsDate.getMonth() + offset);
+        this.renderStats();
+      },
+
+      resetStatsMonthToday() {
+        this.statsDate = new Date();
+        this.renderStats();
+      },
+
+      renderStats() {
+        const y = this.statsDate.getFullYear();
+        const m = this.statsDate.getMonth();
+        document.getElementById('statsMonthTitle').textContent = `${thaiMonths[m]} ${y}`;
+
+        const daysInMonth = new Date(y, m + 1, 0).getDate();
+        const dailyValues = [];
+        let monthTotal = 0;
+        let peakMin = 0;
+        let activeDays = 0;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const key = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+          const val = this.state.stats.history[key] || 0;
+          dailyValues.push({ day: d, dateKey: key, mins: val });
+          monthTotal += val;
+          if (val > 0) activeDays++;
+          if (val > peakMin) peakMin = val;
+        }
+
+        const todayKey = this.toDateKey(new Date());
+        const todayMin = this.state.stats.history[todayKey] || 0;
+        const avgMin = activeDays > 0 ? Math.round(monthTotal / activeDays) : 0;
+
+        document.getElementById('statTodayMin').textContent = `${todayMin} นาที`;
+        document.getElementById('statMonthTotal').textContent = `${monthTotal} นาที`;
+        document.getElementById('statMonthAvg').textContent = `${avgMin} นาที`;
+        document.getElementById('statMonthPeak').textContent = `${peakMin} นาที`;
+
+        this.drawMonthlyLineChart(dailyValues, peakMin);
+      },
+
+      drawMonthlyLineChart(data, peakMin) {
+        const container = document.getElementById('lineChartContainer');
+        const width = 860;
+        const height = 220;
+        const padL = 42, padR = 18, padT = 18, padB = 30;
+        const plotW = width - padL - padR;
+        const plotH = height - padT - padB;
+        const maxVal = Math.max(60, Math.ceil((peakMin || 60) / 30) * 30);
+
+        const getX = (i) => padL + (i / Math.max(1, data.length - 1)) * plotW;
+        const getY = (val) => padT + plotH - (val / maxVal) * plotH;
+
+        const points = data.map((d, i) => `${getX(i).toFixed(1)},${getY(d.mins).toFixed(1)}`).join(' ');
+        const areaPoints = `${getX(0).toFixed(1)},${padT + plotH} ${points} ${getX(data.length - 1).toFixed(1)},${padT + plotH}`;
+
+        let gridLines = '';
+        for (let step = 0; step <= 4; step++) {
+          const v = Math.round((maxVal / 4) * step);
+          const yPos = getY(v).toFixed(1);
+          gridLines += `
+            <line x1="${padL}" y1="${yPos}" x2="${width - padR}" y2="${yPos}" stroke="#23232c" stroke-dasharray="3,3" stroke-width="1"/>
+            <text x="${padL - 8}" y="${Number(yPos) + 4}" fill="#6e6e77" font-size="10" text-anchor="end">${v}</text>
+          `;
+        }
+
+        let xLabels = '';
+        data.forEach((d, i) => {
+          if (d.day === 1 || d.day % 5 === 0 || d.day === data.length) {
+            xLabels += `<text x="${getX(i).toFixed(1)}" y="${height - 8}" fill="#8e8e93" font-size="10" text-anchor="middle">${d.day}</text>`;
+          }
+        });
+
+        let circles = '';
+        data.forEach((d, i) => {
+          const cx = getX(i).toFixed(1);
+          const cy = getY(d.mins).toFixed(1);
+          const r = d.mins > 0 ? 4.5 : 2.5;
+          const fill = d.mins > 0 ? '#ff9f0a' : '#3a3a44';
+          circles += `
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="#0b0b0e" stroke-width="1.5" style="cursor:pointer"
+              onmouseenter="document.getElementById('chartHoverInfo').textContent='วันที่ ${d.dateKey}: โฟกัส ${d.mins} นาที'" />
+          `;
+        });
+
+        container.innerHTML = `
+          <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0.38"/>
+                <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            ${gridLines}
+            <polygon points="${areaPoints}" fill="url(#lineGrad)" />
+            <polyline fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+            ${circles}
+            ${xLabels}
+          </svg>
+        `;
+      },
+
       /* Calendar & Tasks */
-      changeMonth(offset) {
+      changeCalMonth(offset) {
         this.calDate.setMonth(this.calDate.getMonth() + offset);
         this.renderCalendar();
       },
@@ -921,17 +1299,18 @@
         if (task.repeat === 'none') return task.dateKey === dateKey;
         if (dateKey < task.dateKey) return false;
         const d = new Date(dateKey + 'T00:00:00');
+        const orig = new Date(task.dateKey + 'T00:00:00');
         const day = d.getDay();
         if (task.repeat === 'daily') return true;
         if (task.repeat === 'weekdays') return day >= 1 && day <= 5;
         if (task.repeat === 'weekends') return day === 0 || day === 6;
+        if (task.repeat === 'weekly') return day === orig.getDay();
         return false;
       },
 
       renderCalendar() {
         const y = this.calDate.getFullYear();
         const m = this.calDate.getMonth();
-        const thaiMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
         document.getElementById('calMonthTitle').textContent = `${thaiMonths[m]} ${y}`;
 
         const firstDay = new Date(y, m, 1).getDay();
@@ -976,7 +1355,7 @@
           .sort((a, b) => a.time.localeCompare(b.time));
 
         if (tasks.length === 0) {
-          list.innerHTML = `<div style="color:#636366;font-size:13px;text-align:center;padding:20px;">ยังไม่มีแผนในวันนี้</div>`;
+          list.innerHTML = `<div style="color:#636366;font-size:13px;text-align:center;padding:24px;">ยังไม่มีแผนในวันนี้</div>`;
           return;
         }
 
@@ -985,9 +1364,9 @@
           const item = document.createElement('div');
           item.className = 'task-item' + (isDone ? ' done' : '');
           item.innerHTML = `
-            <div class="task-left">
+            <div style="display:flex;align-items:center;gap:10px;flex:1;">
               <input type="checkbox" ${isDone ? 'checked' : ''} onchange="app.toggleTaskDone('${t.id}')">
-              <span class="cat-tag" style="background:${t.cat}"></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:${t.cat};flex-shrink:0;"></span>
               <span style="font-size:12px;color:#8e8e93;">${t.time}</span>
               <span class="task-title" style="font-size:13px;">${t.title}</span>
             </div>
@@ -1044,26 +1423,10 @@
         this.closeModals();
       },
 
-      renderStats() {
-        const today = this.toDateKey(new Date());
-        const todayMin = this.state.stats.history[today] || 0;
-        const totalMin = Object.values(this.state.stats.history).reduce((a, b) => a + b, 0);
-        document.getElementById('statTodayMin').textContent = todayMin;
-        document.getElementById('statTotalMin').textContent = totalMin;
-      },
-
-      saveSettings() {
-        this.state.settings.focus = Math.max(1, parseInt(document.getElementById('setFocusMin').value) || 25);
-        this.state.settings.short = Math.max(1, parseInt(document.getElementById('setShortMin').value) || 5);
-        this.state.settings.long = Math.max(1, parseInt(document.getElementById('setLongMin').value) || 15);
-        this.state.settings.custom = Math.max(1, parseInt(document.getElementById('setCustomMin').value) || 45);
-        this.saveData();
-        this.setPhase(this.state.phase, true);
-        this.closeModals();
-      },
-
       openModal(name) {
         this.closeModals();
+        if (name === 'settings') this.syncSettingsToInputs();
+        if (name === 'stats') this.renderStats();
         document.getElementById(`modal-${name}`).classList.add('open');
       },
 
@@ -1071,7 +1434,7 @@
         document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
       },
 
-      /* Local & Cloud Storage Engine */
+      /* Storage & Cloud Sync */
       saveData() {
         this.state.updatedAt = Date.now();
         this.saveLocal();
@@ -1093,7 +1456,7 @@
           const raw = localStorage.getItem('lockin_data_v2');
           if (!raw) return;
           const data = JSON.parse(raw);
-          if (data.settings) this.state.settings = data.settings;
+          if (data.settings) this.state.settings = { ...this.state.settings, ...data.settings };
           if (data.tasks) this.state.tasks = data.tasks;
           if (data.stats) this.state.stats = data.stats;
           if (data.updatedAt) this.state.updatedAt = data.updatedAt;
@@ -1127,8 +1490,7 @@
       },
 
       setSyncIndicator(status, text) {
-        const dot = document.getElementById('syncDot');
-        dot.className = 'sync-dot ' + status;
+        document.getElementById('syncDot').className = 'sync-dot ' + status;
         document.getElementById('syncStatusText').textContent = text;
       },
 
@@ -1137,16 +1499,15 @@
         this.setSyncIndicator('syncing', 'กำลังซิงก์...');
         try {
           const endpoint = `${this.cloud.url}/lockin_rooms/${this.cloud.key}.json`;
-          const payload = {
-            settings: this.state.settings,
-            tasks: this.state.tasks,
-            stats: this.state.stats,
-            updatedAt: this.state.updatedAt
-          };
           await fetch(endpoint, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+              settings: this.state.settings,
+              tasks: this.state.tasks,
+              stats: this.state.stats,
+              updatedAt: this.state.updatedAt
+            })
           });
           this.setSyncIndicator('online', 'ซิงก์ล่าสุดแล้ว');
         } catch (e) {
@@ -1169,11 +1530,12 @@
           }
 
           if ((remote.updatedAt || 0) > (this.state.updatedAt || 0)) {
-            this.state.settings = remote.settings || this.state.settings;
+            this.state.settings = { ...this.state.settings, ...(remote.settings || {}) };
             this.state.tasks = remote.tasks || [];
             this.state.stats = remote.stats || { history: {} };
             this.state.updatedAt = remote.updatedAt;
             this.saveLocal();
+            this.syncSettingsToInputs();
             this.renderCalendar();
             this.renderTasks();
             this.renderStats();
@@ -1184,7 +1546,7 @@
           this.setSyncIndicator('online', 'ซิงก์ล่าสุดแล้ว');
           if (manual) document.getElementById('cloudMsg').textContent = '✅ เชื่อมต่อและซิงก์ข้อมูลเรียบร้อยแล้ว!';
         } catch (e) {
-          if (manual) document.getElementById('cloudMsg').textContent = '❌ เชื่อมต่อไม่สำเร็จ ตรวจสอบ URL หรือการตั้งค่า Test mode ใน Firebase';
+          if (manual) document.getElementById('cloudMsg').textContent = '❌ เชื่อมต่อไม่สำเร็จ กรุณาตรวจสอบ URL และ Rules ใน Firebase';
         }
       },
 
@@ -1203,7 +1565,7 @@
         reader.onload = () => {
           try {
             const data = JSON.parse(reader.result);
-            this.state.settings = data.settings || this.state.settings;
+            this.state.settings = { ...this.state.settings, ...(data.settings || {}) };
             this.state.tasks = data.tasks || [];
             this.state.stats = data.stats || { history: {} };
             this.saveData();
