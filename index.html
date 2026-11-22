@@ -299,10 +299,10 @@
       letter-spacing: 0.02em;
     }
     .realm-badge.supreme {
-      background: linear-gradient(135deg, #e879f9, #7e22ce);
+      background: linear-gradient(135deg, #f59e0b, #a855f7);
       color: #ffffff;
-      border-color: #f5d0fe;
-      box-shadow: 0 0 14px rgba(217, 70, 239, 0.55);
+      border-color: #fde68a;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.45), 0 0 14px rgba(168, 85, 247, 0.45);
     }
     .mini-qi-bar {
       width: 68px;
@@ -947,8 +947,8 @@
 
         <!-- Purple Heavenly Demon Nano Mini Status Pill -->
         <div class="nano-pill" onclick="app.openModal('status')" title="คลิกเพื่อเปิดคัมภีร์มาร">
-          <span id="miniRealmBadge" class="realm-badge">ศิษย์นอกพรรค</span>
-          <span id="miniLevelText" style="font-weight:700;color:var(--nano-violet);">ขั้น 1</span>
+          <span id="miniRealmBadge" class="realm-badge">หลอมรวมปราณ</span>
+          <span id="miniLevelText" style="font-weight:700;color:var(--nano-violet);">ระดับ 1</span>
           <div class="mini-qi-bar">
             <div id="miniQiFill" class="mini-qi-fill"></div>
           </div>
@@ -1042,7 +1042,7 @@
           </div>
         </div>
 
-        <!-- Right: Daily Quest, Unlockable Titles & Preview Test -->
+        <!-- Right: Daily Quest, Unlockable Titles & Cultivation Guide -->
         <div style="display:flex;flex-direction:column;gap:14px;">
           <div class="nano-panel">
             <div class="nano-sys-tag" style="margin-bottom:8px;">DAILY QUEST (ภารกิจประจำวัน)</div>
@@ -1054,11 +1054,21 @@
             <div id="titleList"></div>
           </div>
 
-          <div class="nano-panel" style="border-style:dashed;border-color:rgba(192,132,252,0.4);">
-            <div style="font-size:12px;color:var(--nano-violet);margin-bottom:8px;">⚡ ทดสอบระบบนาโนมาร (Preview Test)</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn-nano" onclick="app.gainDemonQi(60, 'INT')">+60 ปราณมาร (ปัญญา)</button>
-              <button class="btn-nano" style="background:linear-gradient(135deg,#c084fc,#7e22ce);" onclick="app.gainDemonQi(60, 'STR')">+60 ปราณมาร (กายามาร)</button>
+          <div class="nano-panel" style="background:rgba(16, 9, 28, 0.55);border-color:rgba(168, 85, 247, 0.22);">
+            <div class="nano-sys-tag" style="margin-bottom:8px;">วิถีสะสมปราณมาร</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#c4b5d6;line-height:1.5;">
+              <div style="display:flex;justify-content:space-between;">
+                <span>• โฟกัสครบเวลาจริง</span>
+                <span style="color:var(--nano-violet);font-weight:600;">+2 ปราณมาร / นาที</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;">
+                <span>• เคลียร์งานในปฏิทิน</span>
+                <span style="color:var(--nano-violet);font-weight:600;">+25 ปราณมาร</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;">
+                <span>• เคลียร์ Daily Quest</span>
+                <span style="color:var(--nano-violet);font-weight:600;">+120 ปราณมาร</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1422,10 +1432,10 @@
       /* ==================== NANO MACHINE HEAVENLY DEMON ENGINE ==================== */
       getRealmInfo(lv) {
         if (lv >= 30) return { title: 'มารสวรรค์', realm: 'บรรลุนิรันดร์', supreme: true };
-        if (lv >= 20) return { title: 'รองประมุข', realm: 'ไร้เทียมทาน', supreme: true };
-        if (lv >= 15) return { title: 'เจ้าตำหนัก', realm: 'เหนือมนุษย์', supreme: false };
-        if (lv >= 10) return { title: 'ผู้อาวุโส', realm: 'ขอบเขตสุดยอด', supreme: false };
-        if (lv >= 6)  return { title: 'ศิษย์เอก', realm: 'ปราณแท้จริง', supreme: false };
+        if (lv >= 20) return { title: 'รองประมุข', realm: 'เซียนมาร', supreme: false };
+        if (lv >= 15) return { title: 'เจ้าตำหนัก', realm: 'เหนือสามัญ', supreme: false };
+        if (lv >= 10) return { title: 'ผู้อาวุโส', realm: 'วิญญาณแรกกำเนิด', supreme: false };
+        if (lv >= 6)  return { title: 'ศิษย์เอก', realm: 'แก่นแท้ปราณ', supreme: false };
         if (lv >= 3)  return { title: 'ศิษย์สายใน', realm: 'ก่อเกิดปราณ', supreme: false };
         return { title: 'ศิษย์นอกพรรค', realm: 'หลอมรวมปราณ', supreme: false };
       },
@@ -1492,9 +1502,9 @@
 
         // Mini Pill บนหน้าจอหลัก
         const miniBadge = document.getElementById('miniRealmBadge');
-        miniBadge.textContent = info.title;
+        miniBadge.textContent = info.realm;
         miniBadge.className = 'realm-badge' + (info.supreme ? ' supreme' : '');
-        document.getElementById('miniLevelText').textContent = `ขั้น ${h.level}`;
+        document.getElementById('miniLevelText').textContent = `ระดับ ${h.level}`;
         document.getElementById('miniQiFill').style.width = `${pct}%`;
         document.getElementById('miniTitleText').textContent = `ฉายา: ${h.equippedTitle}`;
 
@@ -1512,8 +1522,10 @@
 
         const maxStat = Math.max(50, h.INT, h.STR, h.VIT, h.AGI);
         ['INT', 'STR', 'VIT', 'AGI'].forEach(k => {
-          document.getElementById(`val${k}`).textContent = h[k];
-          document.getElementById(`bar${k}`).style.width = `${Math.min(100, (h[k] / maxStat) * 100)}%`;
+          const valEl = document.getElementById(`val${k}`);
+          const barEl = document.getElementById(`bar${k}`);
+          if (valEl) valEl.textContent = h[k];
+          if (barEl) barEl.style.width = `${Math.min(100, (h[k] / maxStat) * 100)}%`;
         });
 
         this.drawRadarChart(h, maxStat);
@@ -1590,7 +1602,7 @@
           const ctx = new AudioCtx();
           const now = ctx.currentTime;
 
-          // โทนเสียงอบอุ่นย่านต่ำ-กลาง (C4 261.6Hz + G4 392Hz + C5 523.25Hz) นุ่มลึกไม่แสบหู
+          // โทนเสียงอบอุ่นย่านต่ำ-กลาง (C4 261.63Hz + G4 392Hz + C5 523.25Hz) นุ่มลึกไม่แสบหู
           const freqs = [261.63, 392.00, 523.25];
           const gains = [0.055, 0.035, 0.022];
 
@@ -1602,17 +1614,17 @@
 
             gainNode.gain.setValueAtTime(0.0001, now);
             gainNode.gain.linearRampToValueAtTime(gains[idx], now + 0.09);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 1.8);
 
             osc.connect(gainNode);
             gainNode.connect(ctx.destination);
             osc.start(now);
-            osc.stop(now + 2.25);
+            osc.stop(now + 1.85);
           });
 
           setTimeout(() => {
             if (ctx.state !== 'closed') ctx.close().catch(() => {});
-          }, 2400);
+          }, 2000);
         } catch (e) {}
       },
 
