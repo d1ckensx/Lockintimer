@@ -6,24 +6,31 @@
   <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <title>Lock In Timer</title>
-  <!-- โหลดฟอนต์ตัวเลขยอดนิยมเผื่อมีอินเทอร์เน็ต (หากออฟไลน์จะสลับใช้ฟอนต์ในเครื่องอัตโนมัติ) -->
+  <title>Lock In Timer — วิถีมารสวรรค์ (Nano System)</title>
+  <!-- SVG Favicon: วงแหวนมารสวรรค์สีม่วงเรืองแสงบนพื้นดำสนิท -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23000000'/%3E%3Ccircle cx='50' cy='50' r='34' fill='none' stroke='%23a855f7' stroke-width='6'/%3E%3Ccircle cx='50' cy='50' r='12' fill='%23c084fc'/%3E%3C/svg%3E">
+  <!-- โหลดฟอนต์ตัวเลข 6 สไตล์ใหม่ (คงเหลือ Inter เบสิค + 5 ฟอนต์ใหม่) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;800&family=JetBrains+Mono:wght@700;800&family=Orbitron:wght@700;800&family=Oswald:wght@700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:wght@700&family=Cinzel:wght@700;800&family=Inter:wght@700;800&family=Outfit:wght@700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #000000;
-      --surface: #0b0b0e;
-      --surface-2: #141419;
-      --surface-3: #1c1c24;
-      --border: #24242c;
+      --surface: #0a0810;
+      --surface-2: #120e1c;
+      --surface-3: #1b152a;
+      --border: #271f3b;
       --text: #ffffff;
-      --text-muted: #8e8e93;
-      --accent: #ff9f0a;
+      --text-muted: #8e8e98;
+      /* Nano Machine Purple Heavenly Demon Palette */
+      --nano-purple: #a855f7;
+      --nano-violet: #c084fc;
+      --nano-deep: #7e22ce;
+      --nano-glow: rgba(168, 85, 247, 0.35);
+      --nano-glow-soft: rgba(168, 85, 247, 0.16);
       --green: #30d158;
+      --amber: #ff9f0a;
       --blue: #0a84ff;
-      --purple: #bf5af2;
       --danger: #ff453a;
       --timer-font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
@@ -56,7 +63,7 @@
       position: relative;
     }
 
-    /* Top Bar */
+    /* ==================== 1. TOP BAR (คลีน ไม่มีปุ่มเลือกฟอนต์) ==================== */
     .top-bar {
       width: 100%;
       display: flex;
@@ -73,7 +80,7 @@
       align-items: center;
       gap: 10px;
       font-size: 13px;
-      color: #d1d1d6;
+      color: #e4ddf2;
       font-weight: 500;
     }
 
@@ -81,23 +88,25 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      border: 1.5px solid var(--accent);
+      border: 1.5px solid var(--nano-purple);
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 10px var(--nano-glow);
     }
     .brand-icon::after {
       content: "";
       width: 6px;
       height: 6px;
-      background: var(--accent);
+      background: var(--nano-violet);
       border-radius: 50%;
+      box-shadow: 0 0 6px var(--nano-violet);
     }
 
     .mode-switcher {
       display: flex;
-      background: #0d0d11;
-      border: 1px solid #222229;
+      background: #0c0a12;
+      border: 1px solid #231c36;
       border-radius: 999px;
       padding: 3px;
       gap: 4px;
@@ -114,50 +123,33 @@
       transition: all 0.2s;
       font-family: inherit;
     }
+    .mode-btn:hover {
+      color: #e4ddf2;
+    }
     .mode-btn.active {
-      background: #24242c;
+      background: #231838;
       color: #ffffff;
       font-weight: 600;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .font-quick-select {
-      background: #111116;
-      border: 1px solid #272730;
-      color: #d1d1d6;
-      font-size: 12px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-family: inherit;
-      outline: none;
-    }
-    .font-quick-select:hover {
-      border-color: #484854;
-      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(168, 85, 247, 0.35);
     }
 
     .cloud-pill-btn {
-      background: #111116;
-      border: 1px solid #272730;
-      color: #d1d1d6;
+      background: #0f0c18;
+      border: 1px solid #271f3b;
+      color: #dcd5eb;
       font-size: 12px;
-      padding: 6px 13px;
+      padding: 6px 14px;
       border-radius: 999px;
       cursor: pointer;
       font-family: inherit;
       display: flex;
       align-items: center;
       gap: 7px;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     .cloud-pill-btn:hover {
-      border-color: #484854;
+      border-color: var(--nano-purple);
+      box-shadow: 0 0 12px var(--nano-glow-soft);
       color: #fff;
     }
     .sync-dot {
@@ -171,10 +163,11 @@
       box-shadow: 0 0 8px var(--green);
     }
     .sync-dot.syncing {
-      background: var(--accent);
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
     }
 
-    /* Center Stage & Zero-Jitter Timer */
+    /* ==================== 2. CENTER STAGE & ZERO-JITTER TIMER ==================== */
     .center-stage {
       display: flex;
       flex-direction: column;
@@ -184,7 +177,7 @@
       width: 100%;
     }
 
-    /* โครงสร้างล็อกตำแหน่งตัวเลขทุกหลักไม่ให้สั่น 100% */
+    /* ล็อกตำแหน่งตัวเลขแต่ละหลักไม่ให้สั่น 100% */
     .timer-digits {
       display: inline-flex;
       align-items: center;
@@ -202,7 +195,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* บังคับความกว้างของตัวเลขแต่ละหลักให้คงที่ตายตัว */
     .digit-cell {
       display: inline-flex;
       align-items: center;
@@ -213,7 +205,6 @@
       will-change: contents, opacity, transform;
     }
 
-    /* ความกว้างของเครื่องหมาย : ล็อกตายตัว */
     .colon-cell {
       display: inline-flex;
       align-items: center;
@@ -224,25 +215,20 @@
       opacity: 0.92;
     }
 
-    /* เอฟเฟกต์สมูทแบบไม่สั่นเมื่อตัวเลขเปลี่ยน */
     @keyframes smoothTick {
-      0% {
-        opacity: 0.55;
-        filter: blur(0.6px);
-      }
-      100% {
-        opacity: 1;
-        filter: blur(0px);
-      }
+      0% { opacity: 0.55; filter: blur(0.6px); }
+      100% { opacity: 1; filter: blur(0px); }
     }
     .digit-cell.smooth-change {
       animation: smoothTick 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
 
-    /* ปรับระยะช่องตัวเลขสำหรับฟอนต์บางสไตล์ให้สมดุล */
-    body[data-font="tall"] .digit-cell { width: 0.52em; }
-    body[data-font="cyber"] .digit-cell { width: 0.74em; font-size: 0.88em; }
-    body[data-font="mono"] .digit-cell { width: 0.62em; }
+    /* ปรับความกว้างช่องตัวเลขเฉพาะแต่ละฟอนต์ให้สมดุลและไม่สั่น 100% */
+    body[data-font="chakra"] .digit-cell { width: 0.64em; }
+    body[data-font="bebas"] .digit-cell { width: 0.48em; letter-spacing: 0.02em; }
+    body[data-font="syne"] .digit-cell { width: 0.72em; font-size: 0.92em; }
+    body[data-font="outfit"] .digit-cell { width: 0.62em; }
+    body[data-font="cinzel"] .digit-cell { width: 0.66em; font-size: 0.94em; }
 
     .aux-section {
       display: flex;
@@ -269,44 +255,104 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: #2c2c34;
+      background: #271f3b;
     }
     .pomo-dot.active {
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
+      background: var(--nano-purple);
+      box-shadow: 0 0 10px var(--nano-purple);
     }
     .pomo-dot.done {
-      background: #ffffff;
+      background: var(--nano-violet);
     }
 
-    .banner-pill {
+    /* Nano Machine Purple Heavenly Demon Mini Status Pill */
+    .nano-pill {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: #0b0b0e;
-      border: 1px solid #23232b;
+      background: linear-gradient(90deg, rgba(20, 10, 36, 0.92), rgba(10, 5, 20, 0.94));
+      border: 1px solid rgba(168, 85, 247, 0.48);
+      box-shadow: 0 0 22px rgba(168, 85, 247, 0.2), inset 0 0 12px rgba(192, 132, 252, 0.08);
       border-radius: 999px;
-      padding: 9px 20px;
-      font-size: 13px;
-      color: #e5e5ea;
-      margin-top: 6px;
-    }
-    .banner-pill button {
-      background: none;
-      border: none;
+      padding: 8px 18px;
+      font-size: 12px;
+      color: #f3e8ff;
       cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
+      transition: all 0.2s ease;
+      margin-top: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    .banner-open {
-      color: var(--accent);
-      font-weight: 600;
+    .nano-pill:hover {
+      border-color: var(--nano-violet);
+      box-shadow: 0 0 28px rgba(168, 85, 247, 0.4);
+      transform: translateY(-1px);
     }
-    .banner-later {
-      color: #636366;
+    .realm-badge {
+      background: linear-gradient(135deg, var(--nano-purple), var(--nano-deep));
+      border: 1px solid rgba(216, 180, 254, 0.5);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      letter-spacing: 0.02em;
+    }
+    .realm-badge.supreme {
+      background: linear-gradient(135deg, #e879f9, #7e22ce);
+      color: #ffffff;
+      border-color: #f5d0fe;
+      box-shadow: 0 0 14px rgba(217, 70, 239, 0.55);
+    }
+    .mini-qi-bar {
+      width: 68px;
+      height: 5px;
+      background: #1f1233;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .mini-qi-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--nano-deep), var(--nano-violet));
+      width: 0%;
+      transition: width 0.4s ease;
     }
 
-    /* Bottom Controls */
+    /* Breakthrough Toast Notification (Nano System Purple Glow) */
+    .level-up-toast {
+      position: fixed;
+      top: 76px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: linear-gradient(180deg, rgba(22, 10, 42, 0.97), rgba(9, 4, 18, 0.99));
+      border: 1px solid var(--nano-violet);
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.55), inset 0 0 18px rgba(192, 132, 252, 0.14);
+      padding: 14px 28px;
+      border-radius: 14px;
+      text-align: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .level-up-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .level-up-title {
+      color: var(--nano-violet);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 12px rgba(168, 85, 247, 0.85);
+    }
+    .level-up-sub {
+      font-size: 12px;
+      color: #e9d5ff;
+      margin-top: 4px;
+    }
+
+    /* ==================== 3. BOTTOM CONTROLS ==================== */
     .bottom-bar {
       display: flex;
       flex-direction: column;
@@ -329,20 +375,25 @@
       font-family: inherit;
       transition: transform 0.12s ease, background 0.2s;
     }
+    .start-btn:hover {
+      background: #e8e8ed;
+    }
     .start-btn:active {
       transform: scale(0.97);
     }
     .start-btn.running {
-      background: #18181f;
+      background: #140f21;
       color: #ffffff;
-      border: 1px solid #32323c;
+      border: 1px solid #3b2a5c;
     }
 
     .sub-nav {
       display: flex;
-      gap: 24px;
+      gap: 22px;
       font-size: 13px;
       color: var(--text-muted);
+      flex-wrap: wrap;
+      justify-content: center;
     }
     .sub-nav button {
       background: none;
@@ -356,8 +407,16 @@
     .sub-nav button:hover {
       color: #ffffff;
     }
+    .sub-nav button.nano-nav-btn {
+      color: var(--nano-violet);
+      font-weight: 700;
+      text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    }
+    .sub-nav button.nano-nav-btn:hover {
+      color: #f3e8ff;
+    }
 
-    /* PURE FOCUS MODE */
+    /* ==================== 4. PURE FOCUS MODE ==================== */
     body.pure-focus .top-bar,
     body.pure-focus .aux-section,
     body.pure-focus .bottom-bar {
@@ -375,9 +434,9 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(20, 20, 26, 0.88);
-      border: 1px solid #2e2e38;
-      color: #a1a1aa;
+      background: rgba(18, 12, 30, 0.88);
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      color: #d8b4fe;
       font-size: 12px;
       padding: 7px 16px;
       border-radius: 999px;
@@ -392,11 +451,11 @@
       pointer-events: auto;
     }
 
-    /* Modals */
+    /* ==================== 5. MODALS ==================== */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.84);
+      background: rgba(0, 0, 0, 0.86);
       backdrop-filter: blur(10px);
       display: none;
       align-items: center;
@@ -418,10 +477,103 @@
       overflow-y: auto;
       padding: 24px;
       color: var(--text);
-      box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.88);
     }
     .modal-card.wide {
       max-width: 980px;
+    }
+
+    /* Nano Machine Purple Heavenly Demon Status Window */
+    .modal-card.nano-window {
+      background: linear-gradient(180deg, #110820 0%, #05020a 100%);
+      border: 1px solid rgba(168, 85, 247, 0.55);
+      box-shadow: 0 0 60px rgba(126, 34, 206, 0.32), inset 0 0 28px rgba(192, 132, 252, 0.08);
+      max-width: 840px;
+    }
+    .nano-header {
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      padding-bottom: 14px;
+      margin-bottom: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nano-sys-tag {
+      font-family: 'Orbitron', 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--nano-violet);
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.55);
+    }
+    .nano-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 720px) {
+      .nano-grid { grid-template-columns: 1fr; }
+    }
+    .nano-panel {
+      background: rgba(20, 11, 36, 0.72);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .stat-bar-row {
+      margin-bottom: 12px;
+    }
+    .stat-bar-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .stat-code {
+      font-weight: 700;
+      color: var(--nano-violet);
+    }
+    .stat-track {
+      height: 7px;
+      background: #1b0f2e;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .stat-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    .title-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 12px;
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.32);
+      color: #e9d5ff;
+      cursor: pointer;
+      margin: 3px;
+      transition: all 0.15s;
+    }
+    .title-chip:hover:not(.locked) {
+      border-color: var(--nano-violet);
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+    }
+    .title-chip.locked {
+      opacity: 0.35;
+      cursor: not-allowed;
+      border-color: #2c1e42;
+    }
+    .title-chip.equipped {
+      background: linear-gradient(135deg, var(--nano-purple), var(--nano-deep));
+      border-color: #e9d5ff;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.45);
     }
 
     .modal-header {
@@ -446,9 +598,7 @@
       cursor: pointer;
       font-size: 14px;
     }
-    .close-btn:hover {
-      color: #fff;
-    }
+    .close-btn:hover { color: #fff; border-color: var(--nano-purple); }
 
     .section-label {
       font-size: 12px;
@@ -459,7 +609,6 @@
       letter-spacing: 0.04em;
     }
 
-    /* Font Picker Grid in Settings */
     .font-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -467,9 +616,7 @@
       margin-bottom: 18px;
     }
     @media (max-width: 520px) {
-      .font-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .font-grid { grid-template-columns: repeat(2, 1fr); }
     }
     .font-card {
       background: var(--surface-2);
@@ -480,12 +627,11 @@
       text-align: center;
       transition: all 0.15s;
     }
-    .font-card:hover {
-      border-color: #555;
-    }
+    .font-card:hover { border-color: #5b4386; }
     .font-card.active {
-      border-color: var(--accent);
-      background: rgba(255, 159, 10, 0.1);
+      border-color: var(--nano-purple);
+      background: rgba(168, 85, 247, 0.14);
+      box-shadow: 0 0 14px rgba(168, 85, 247, 0.22);
     }
     .font-sample {
       font-size: 20px;
@@ -518,7 +664,7 @@
       transition: all 0.15s;
     }
     .preset-chip:hover {
-      border-color: var(--accent);
+      border-color: var(--nano-purple);
       color: #fff;
     }
 
@@ -572,14 +718,14 @@
     .toggle-row input[type="checkbox"] {
       width: 18px;
       height: 18px;
-      accent-color: var(--accent);
+      accent-color: var(--nano-purple);
       cursor: pointer;
     }
 
     .btn-primary {
-      background: var(--accent);
-      color: #000;
-      border: none;
+      background: linear-gradient(135deg, var(--nano-purple), var(--nano-deep));
+      color: #ffffff;
+      border: 1px solid rgba(216, 180, 254, 0.35);
       padding: 11px 18px;
       border-radius: 12px;
       font-weight: 700;
@@ -587,6 +733,32 @@
       cursor: pointer;
       font-family: inherit;
       width: 100%;
+      transition: box-shadow 0.2s, transform 0.12s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.4);
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-nano {
+      background: linear-gradient(135deg, #a855f7, #7e22ce);
+      color: #ffffff;
+      border: 1px solid rgba(216, 180, 254, 0.45);
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.12s, box-shadow 0.2s;
+    }
+    .btn-nano:hover:not(:disabled) {
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.5);
+    }
+    .btn-nano:active:not(:disabled) {
+      transform: scale(0.97);
     }
     .btn-sm {
       background: var(--surface-2);
@@ -598,9 +770,7 @@
       cursor: pointer;
       font-family: inherit;
     }
-    .btn-sm:hover {
-      border-color: #484854;
-    }
+    .btn-sm:hover { border-color: var(--nano-purple); }
 
     /* Stats Monthly Line Chart */
     .stats-month-bar {
@@ -612,6 +782,8 @@
       border-radius: 14px;
       padding: 10px 14px;
       margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .stats-kpi-grid {
       display: grid;
@@ -620,9 +792,7 @@
       margin-bottom: 18px;
     }
     @media (max-width: 640px) {
-      .stats-kpi-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .stats-kpi-grid { grid-template-columns: repeat(2, 1fr); }
     }
     .kpi-card {
       background: var(--surface-2);
@@ -630,15 +800,8 @@
       border-radius: 14px;
       padding: 14px;
     }
-    .kpi-label {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-    .kpi-val {
-      font-size: 24px;
-      font-weight: 800;
-      margin-top: 4px;
-    }
+    .kpi-label { font-size: 11px; color: var(--text-muted); }
+    .kpi-val { font-size: 24px; font-weight: 800; margin-top: 4px; }
 
     .chart-box {
       background: var(--surface-2);
@@ -654,17 +817,11 @@
       margin-bottom: 12px;
       font-size: 13px;
       color: #d1d1d6;
+      flex-wrap: wrap;
+      gap: 6px;
     }
-    .svg-chart-wrap {
-      width: 100%;
-      height: 230px;
-      position: relative;
-    }
-    .chart-tooltip {
-      font-size: 12px;
-      color: var(--accent);
-      font-weight: 600;
-    }
+    .svg-chart-wrap { width: 100%; height: 230px; position: relative; }
+    .chart-tooltip { font-size: 12px; color: var(--nano-violet); font-weight: 600; }
 
     /* Calendar & Planner */
     .planner-grid {
@@ -673,9 +830,7 @@
       gap: 20px;
     }
     @media (max-width: 780px) {
-      .planner-grid {
-        grid-template-columns: 1fr;
-      }
+      .planner-grid { grid-template-columns: 1fr; }
     }
     .cal-weekdays, .cal-days {
       display: grid;
@@ -690,8 +845,8 @@
     }
     .cal-day {
       aspect-ratio: 1;
-      background: #121217;
-      border: 1px solid #1f1f27;
+      background: #100c1a;
+      border: 1px solid #211933;
       border-radius: 10px;
       padding: 6px;
       cursor: pointer;
@@ -700,26 +855,11 @@
       justify-content: space-between;
       font-size: 12px;
     }
-    .cal-day.today {
-      border-color: var(--accent);
-    }
-    .cal-day.selected {
-      background: #23232e;
-      border-color: #ffffff;
-    }
-    .cal-day.other-month {
-      opacity: 0.28;
-    }
-    .day-dots {
-      display: flex;
-      gap: 3px;
-      flex-wrap: wrap;
-    }
-    .day-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-    }
+    .cal-day.today { border-color: var(--nano-purple); }
+    .cal-day.selected { background: #23183b; border-color: #ffffff; }
+    .cal-day.other-month { opacity: 0.28; }
+    .day-dots { display: flex; gap: 3px; flex-wrap: wrap; }
+    .day-dot { width: 5px; height: 5px; border-radius: 50%; }
 
     .input, select {
       background: var(--surface-2);
@@ -731,9 +871,7 @@
       font-family: inherit;
       outline: none;
     }
-    .input:focus {
-      border-color: var(--accent);
-    }
+    .input:focus, select:focus { border-color: var(--nano-purple); }
     .task-list {
       display: flex;
       flex-direction: column;
@@ -759,8 +897,14 @@
   </style>
 </head>
 <body data-font="default">
+  <!-- Breakthrough Notification Toast (Nano Machine Purple Glow) -->
+  <div id="levelUpToast" class="level-up-toast">
+    <div id="toastTitle" class="level-up-title">ทะลวงขอบเขต!</div>
+    <div id="toastSub" class="level-up-sub">ปราณมารเพิ่มขึ้น</div>
+  </div>
+
   <div class="app-shell">
-    <!-- Top Bar -->
+    <!-- Top Bar: คลีน มีเฉพาะแบรนด์ โหมด และซิงก์ Cloud -->
     <header class="top-bar">
       <div class="brand">
         <div class="brand-icon"></div>
@@ -774,24 +918,13 @@
         <button class="mode-btn" onclick="app.setPhase('custom')">อิสระ</button>
       </div>
 
-      <div class="top-actions">
-        <select id="quickFontSelect" class="font-quick-select" onchange="app.setFont(this.value)" title="เปลี่ยนฟอนต์ตัวเลข">
-          <option value="default">🔤 ฟอนต์: Modern Bold (ต้นฉบับ)</option>
-          <option value="mono">🔤 ฟอนต์: JetBrains Mono (โค้ดดิ้งนิ่งสนิท)</option>
-          <option value="space">🔤 ฟอนต์: Space Grotesk (โมเดิร์นเท่ๆ)</option>
-          <option value="tall">🔤 ฟอนต์: Oswald Tall (ทรงสูงสปอร์ต)</option>
-          <option value="cyber">🔤 ฟอนต์: Orbitron Digital (ดิจิทัลล้ำยุค)</option>
-          <option value="serif">🔤 ฟอนต์: Classic Serif (คลาสสิกหรูหรา)</option>
-        </select>
-
-        <button class="cloud-pill-btn" onclick="app.openModal('cloud')">
-          <span id="syncDot" class="sync-dot"></span>
-          <span id="syncStatusText">ซิงก์ Cloud</span>
-        </button>
-      </div>
+      <button class="cloud-pill-btn" onclick="app.openModal('cloud')">
+        <span id="syncDot" class="sync-dot"></span>
+        <span id="syncStatusText">ซิงก์ Cloud</span>
+      </button>
     </header>
 
-    <!-- Center Stage: โครงสร้างแยกช่องตัวเลขป้องกันการขยับ/สั่น 100% -->
+    <!-- Center Stage -->
     <main class="center-stage">
       <div id="timerDisplay" class="timer-digits" onclick="app.toggleTimer()" title="คลิกเพื่อเริ่มหรือหยุด">
         <span class="digit-cell" id="d0">0</span>
@@ -812,10 +945,14 @@
           <button class="btn-sm" style="padding:2px 8px;font-size:11px;" onclick="app.skipPhase()">ข้าม →</button>
         </div>
 
-        <div id="planBanner" class="banner-pill">
-          <span id="bannerText">พรุ่งนี้จะทำอะไรบ้าง? วางแผนไว้ก่อนนอน</span>
-          <button class="banner-open" onclick="app.openModal('plan')">เปิดแผน</button>
-          <button class="banner-later" onclick="document.getElementById('planBanner').style.display='none'">ไว้ทีหลัง</button>
+        <!-- Purple Heavenly Demon Nano Mini Status Pill -->
+        <div class="nano-pill" onclick="app.openModal('status')" title="คลิกเพื่อเปิดคัมภีร์มาร">
+          <span id="miniRealmBadge" class="realm-badge">ศิษย์นอกพรรค</span>
+          <span id="miniLevelText" style="font-weight:700;color:var(--nano-violet);">ขั้น 1</span>
+          <div class="mini-qi-bar">
+            <div id="miniQiFill" class="mini-qi-fill"></div>
+          </div>
+          <span id="miniTitleText" style="color:#d8b4fe;">ฉายา: ผู้สืบทอดนาโน</span>
         </div>
       </div>
     </main>
@@ -825,7 +962,8 @@
       <button id="startBtn" class="start-btn" onclick="app.toggleTimer()">เริ่ม</button>
       <nav class="sub-nav">
         <button onclick="app.resetTimer()">รีเซ็ต</button>
-        <button onclick="app.openModal('settings')">ตั้งเวลา / ฟอนต์</button>
+        <button onclick="app.openModal('settings')">ตั้งเวลา</button>
+        <button class="nano-nav-btn" onclick="app.openModal('status')">คัมภีร์มาร</button>
         <button onclick="app.openModal('stats')">สถิติ</button>
         <button onclick="app.openModal('plan')">แผน</button>
         <button onclick="app.toggleFocusMode()">โหมดโฟกัส</button>
@@ -835,8 +973,101 @@
 
   <button class="focus-exit-btn" onclick="app.toggleFocusMode()">ออกจากโหมดโฟกัส (Esc / F)</button>
 
-  <!-- Modal 1: ตั้งเวลา + เลือกฟอนต์ + ตั้งความสมูท -->
-  <div id="modal-settings" class="modal-backdrop">
+  <!-- Modal: Nano Machine Purple Heavenly Demon Status Window (คัมภีร์มาร) -->
+  <div id="modal-status" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
+    <div class="modal-card nano-window">
+      <div class="nano-header">
+        <div>
+          <div class="nano-sys-tag">[ NANO SYSTEM : วิถีมารสวรรค์ ]</div>
+          <h3 style="font-size:20px;margin-top:4px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span id="winRealmTitle" style="color:#fff;">ศิษย์นอกพรรค</span>
+            <span id="winRealmBadge" class="realm-badge" style="font-size:12px;padding:3px 10px;">หลอมรวมปราณ</span>
+          </h3>
+        </div>
+        <button class="close-btn" onclick="app.closeModals()">✕</button>
+      </div>
+
+      <div class="nano-grid">
+        <!-- Left: Level, Radar Chart & 4 Core Attributes -->
+        <div class="nano-panel">
+          <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px;">
+            <div>
+              <span style="font-size:12px;color:#d8b4fe;">ระดับตบะ (LEVEL)</span>
+              <div id="winLevelNum" style="font-family:'Orbitron',sans-serif;font-size:32px;font-weight:800;color:var(--nano-violet);line-height:1;">1</div>
+            </div>
+            <div style="text-align:right;">
+              <div id="winQiText" style="font-size:12px;color:var(--nano-violet);font-weight:700;">0 / 100 ปราณมาร</div>
+              <div id="winTotalPower" style="font-size:11px;color:#a79ab8;margin-top:2px;">พลังปราณมาร: 530</div>
+            </div>
+          </div>
+
+          <div class="stat-track" style="height:9px;margin-bottom:16px;">
+            <div id="winQiFill" class="stat-fill" style="background:linear-gradient(90deg, #7e22ce, #c084fc);width:0%;"></div>
+          </div>
+
+          <!-- Glowing Purple Radar Chart SVG -->
+          <div id="radarContainer" style="width:100%;height:190px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;"></div>
+
+          <!-- 4 Core Attributes -->
+          <div class="stat-bar-row">
+            <div class="stat-bar-top">
+              <span><span class="stat-code">ปัญญา</span> (INT • เรียน / ทำโจทย์)</span>
+              <strong id="valINT">10</strong>
+            </div>
+            <div class="stat-track"><div id="barINT" class="stat-fill" style="background:#c084fc;width:20%;"></div></div>
+          </div>
+
+          <div class="stat-bar-row">
+            <div class="stat-bar-top">
+              <span><span class="stat-code">กายามาร</span> (STR • ออกกำลังกาย)</span>
+              <strong id="valSTR">10</strong>
+            </div>
+            <div class="stat-track"><div id="barSTR" class="stat-fill" style="background:#a855f7;width:20%;"></div></div>
+          </div>
+
+          <div class="stat-bar-row">
+            <div class="stat-bar-top">
+              <span><span class="stat-code">จิตมาร</span> (VIT • วินัย / กิจวัตร)</span>
+              <strong id="valVIT">10</strong>
+            </div>
+            <div class="stat-track"><div id="barVIT" class="stat-fill" style="background:#8b5cf6;width:20%;"></div></div>
+          </div>
+
+          <div class="stat-bar-row" style="margin-bottom:0;">
+            <div class="stat-bar-top">
+              <span><span class="stat-code">วิชาตัวเบา</span> (AGI • ความเฉียบคม)</span>
+              <strong id="valAGI">10</strong>
+            </div>
+            <div class="stat-track"><div id="barAGI" class="stat-fill" style="background:#e879f9;width:20%;"></div></div>
+          </div>
+        </div>
+
+        <!-- Right: Daily Quest, Unlockable Titles & Preview Test -->
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="nano-panel">
+            <div class="nano-sys-tag" style="margin-bottom:8px;">DAILY QUEST (ภารกิจประจำวัน)</div>
+            <div id="dailyQuestList" style="display:flex;flex-direction:column;gap:8px;font-size:13px;"></div>
+          </div>
+
+          <div class="nano-panel">
+            <div class="nano-sys-tag" style="margin-bottom:8px;">ฉายา (คลิกเพื่อสวมใส่)</div>
+            <div id="titleList"></div>
+          </div>
+
+          <div class="nano-panel" style="border-style:dashed;border-color:rgba(192,132,252,0.4);">
+            <div style="font-size:12px;color:var(--nano-violet);margin-bottom:8px;">⚡ ทดสอบระบบนาโนมาร (Preview Test)</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn-nano" onclick="app.gainDemonQi(60, 'INT')">+60 ปราณมาร (ปัญญา)</button>
+              <button class="btn-nano" style="background:linear-gradient(135deg,#c084fc,#7e22ce);" onclick="app.gainDemonQi(60, 'STR')">+60 ปราณมาร (กายามาร)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 1: ตั้งเวลา (ตัวเลือกฟอนต์ 6 สไตล์อยู่ที่นี่ที่เดียว) -->
+  <div id="modal-settings" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
     <div class="modal-card">
       <div class="modal-header">
         <h3>ตั้งเวลาและสไตล์ตัวเลข</h3>
@@ -847,27 +1078,27 @@
       <div class="font-grid" id="fontPickerGrid">
         <div class="font-card active" data-font="default" onclick="app.setFont('default')">
           <div class="font-sample" style="font-family:'Inter',sans-serif;">0:25:00</div>
-          <div class="font-name">Modern Bold</div>
+          <div class="font-name">Modern Bold — เบสิค</div>
         </div>
-        <div class="font-card" data-font="mono" onclick="app.setFont('mono')">
-          <div class="font-sample" style="font-family:'JetBrains Mono',monospace;">0:25:00</div>
-          <div class="font-name">JetBrains Mono</div>
+        <div class="font-card" data-font="chakra" onclick="app.setFont('chakra')">
+          <div class="font-sample" style="font-family:'Chakra Petch',sans-serif;">0:25:00</div>
+          <div class="font-name">Chakra Petch — ไซเบอร์นาโน</div>
         </div>
-        <div class="font-card" data-font="space" onclick="app.setFont('space')">
-          <div class="font-sample" style="font-family:'Space Grotesk',sans-serif;">0:25:00</div>
-          <div class="font-name">Space Grotesk</div>
+        <div class="font-card" data-font="bebas" onclick="app.setFont('bebas')">
+          <div class="font-sample" style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:0.04em;">0:25:00</div>
+          <div class="font-name">Bebas Neue — ทรงสูงโปสเตอร์</div>
         </div>
-        <div class="font-card" data-font="tall" onclick="app.setFont('tall')">
-          <div class="font-sample" style="font-family:'Oswald',sans-serif;">0:25:00</div>
-          <div class="font-name">Oswald Tall</div>
+        <div class="font-card" data-font="syne" onclick="app.setFont('syne')">
+          <div class="font-sample" style="font-family:'Syne',sans-serif;font-size:18px;">0:25:00</div>
+          <div class="font-name">Syne — อาร์ตโมเดิร์น</div>
         </div>
-        <div class="font-card" data-font="cyber" onclick="app.setFont('cyber')">
-          <div class="font-sample" style="font-family:'Orbitron',sans-serif;font-size:16px;">0:25:00</div>
-          <div class="font-name">Orbitron Digital</div>
+        <div class="font-card" data-font="outfit" onclick="app.setFont('outfit')">
+          <div class="font-sample" style="font-family:'Outfit',sans-serif;">0:25:00</div>
+          <div class="font-name">Outfit — มินิมอลโค้งมน</div>
         </div>
-        <div class="font-card" data-font="serif" onclick="app.setFont('serif')">
-          <div class="font-sample" style="font-family:Georgia,serif;">0:25:00</div>
-          <div class="font-name">Classic Serif</div>
+        <div class="font-card" data-font="cinzel" onclick="app.setFont('cinzel')">
+          <div class="font-sample" style="font-family:'Cinzel',serif;font-size:18px;">0:25:00</div>
+          <div class="font-name">Cinzel — อักขระจอมยุทธ์</div>
         </div>
       </div>
 
@@ -928,7 +1159,7 @@
         <input id="setAutoStart" type="checkbox">
       </div>
       <div class="toggle-row" style="margin-bottom:16px;">
-        <span>เปิดเสียงแจ้งเตือนเมื่อหมดเวลา</span>
+        <span>เปิดเสียงระฆังแจ้งเตือนเมื่อหมดเวลา</span>
         <input id="setSoundOn" type="checkbox" checked>
       </div>
 
@@ -939,8 +1170,8 @@
     </div>
   </div>
 
-  <!-- Modal 2: สถิติรายเดือน + กราฟเส้นย้อนดูได้ทุกเดือน -->
-  <div id="modal-stats" class="modal-backdrop">
+  <!-- Modal 2: สถิติรายเดือน + กราฟเส้นสีม่วงย้อนดูได้ทุกเดือน -->
+  <div id="modal-stats" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
     <div class="modal-card wide">
       <div class="modal-header">
         <h3>สถิติการโฟกัสรายเดือน (กราฟเส้น)</h3>
@@ -952,7 +1183,7 @@
           <button class="btn-sm" onclick="app.changeStatsMonth(-12)">« ปีก่อน</button>
           <button class="btn-sm" onclick="app.changeStatsMonth(-1)">◀ เดือนก่อน</button>
         </div>
-        <strong id="statsMonthTitle" style="font-size:16px;color:var(--accent);">พฤศจิกายน 2026</strong>
+        <strong id="statsMonthTitle" style="font-size:16px;color:var(--nano-violet);">พฤศจิกายน 2026</strong>
         <div style="display:flex;gap:6px;">
           <button class="btn-sm" onclick="app.resetStatsMonthToday()">เดือนปัจจุบัน</button>
           <button class="btn-sm" onclick="app.changeStatsMonth(1)">เดือนถัดไป ▶</button>
@@ -963,7 +1194,7 @@
       <div class="stats-kpi-grid">
         <div class="kpi-card">
           <div class="kpi-label">โฟกัสวันนี้</div>
-          <div id="statTodayMin" class="kpi-val" style="color:var(--accent);">0 นาที</div>
+          <div id="statTodayMin" class="kpi-val" style="color:var(--nano-violet);">0 นาที</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-label">รวมทั้งเดือนนี้</div>
@@ -975,7 +1206,7 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-label">วันที่โฟกัสสูงสุดในเดือน</div>
-          <div id="statMonthPeak" class="kpi-val" style="color:var(--blue);">0 นาที</div>
+          <div id="statMonthPeak" class="kpi-val" style="color:var(--nano-purple);">0 นาที</div>
         </div>
       </div>
 
@@ -990,7 +1221,7 @@
   </div>
 
   <!-- Modal 3: ปฏิทินวางแผนชีวิตระยะยาว -->
-  <div id="modal-plan" class="modal-backdrop">
+  <div id="modal-plan" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
     <div class="modal-card wide">
       <div class="modal-header">
         <h3>ปฏิทินวางแผนตารางชีวิตระยะยาว</h3>
@@ -1015,24 +1246,24 @@
         </div>
 
         <div>
-          <div id="selectedDateTitle" style="margin-bottom:10px;font-weight:700;color:var(--accent);">ตารางงาน</div>
+          <div id="selectedDateTitle" style="margin-bottom:10px;font-weight:700;color:var(--nano-violet);">ตารางงาน</div>
           <div style="display:flex;gap:8px;margin-bottom:8px;">
             <input id="taskTime" type="time" class="input" value="09:00" style="width:115px;">
-            <input id="taskTitle" type="text" class="input" placeholder="เพิ่มตารางเรียน / อ่านหนังสือ / โจทย์..." style="flex:1;">
+            <input id="taskTitle" type="text" class="input" placeholder="เพิ่มตารางฝึก / อ่านหนังสือ / โจทย์..." style="flex:1;">
           </div>
           <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;">
             <select id="taskCat" class="input">
-              <option value="#ff9f0a">🟠 เรียน / โจทย์</option>
-              <option value="#30d158">🟢 ออกกำลังกาย / สุขภาพ</option>
-              <option value="#0a84ff">🔵 กิจวัตรประจำวัน</option>
-              <option value="#bf5af2">🟣 เป้าหมายใหญ่</option>
+              <option value="#ff9f0a">🟠 เรียน / โจทย์ (+ปัญญา)</option>
+              <option value="#30d158">🟢 ออกกำลังกาย (+กายามาร)</option>
+              <option value="#0a84ff">🔵 กิจวัตร (+จิตมาร)</option>
+              <option value="#a855f7">🟣 เป้าหมายใหญ่ (+วิชาตัวเบา)</option>
             </select>
             <select id="taskRepeat" class="input">
               <option value="none">เฉพาะวันนี้</option>
-              <option value="daily">ทุกวัน (กิจวัตร)</option>
-              <option value="weekdays">จันทร์ - ศุกร์</option>
-              <option value="weekends">เสาร์ - อาทิตย์</option>
-              <option value="weekly">ทุกสัปดาห์ (วันเดียวกัน)</option>
+              <option value="daily">ทุกวัน</option>
+              <option value="weekdays">จันทร์-ศุกร์</option>
+              <option value="weekends">เสาร์-อาทิตย์</option>
+              <option value="weekly">ทุกสัปดาห์</option>
             </select>
             <button class="btn-primary" style="width:auto;padding:9px 16px;" onclick="app.addTask()">+ เพิ่มแผน</button>
           </div>
@@ -1043,14 +1274,14 @@
   </div>
 
   <!-- Modal 4: Cloud Sync & Backup -->
-  <div id="modal-cloud" class="modal-backdrop">
+  <div id="modal-cloud" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
     <div class="modal-card">
       <div class="modal-header">
         <h3>☁️ ซิงก์ข้อมูล Cloud อัตโนมัติ (คอม + แท็บเล็ต)</h3>
         <button class="close-btn" onclick="app.closeModals()">✕</button>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;line-height:1.5;">
-        <p style="color:#a1a1aa;">ใส่ลิงก์ <b>Firebase Realtime Database URL</b> และตั้ง <b>รหัสซิงก์ส่วนตัว</b> ให้ตรงกันทั้งในคอมพิวเตอร์และแท็บเล็ต</p>
+        <p style="color:#a1a1aa;">ใส่ลิงก์ <b>Firebase Realtime Database URL</b> และตั้ง <b>รหัสซิงก์ส่วนตัว</b> ให้ตรงกันทั้งในคอมพิวเตอร์และแท็บเล็ต ข้อมูลทั้งหมดจะซิงก์หากันอัตโนมัติ</p>
         <label>1. Firebase Database URL:
           <input id="cloudDbUrl" type="text" class="input" style="width:100%;margin-top:4px;" placeholder="https://timer-c80ae-default-rtdb.asia-southeast1.firebasedatabase.app">
         </label>
@@ -1064,7 +1295,7 @@
         <div id="cloudMsg" style="font-size:12px;color:var(--green);min-height:18px;"></div>
 
         <hr style="border:none;border-top:1px solid var(--border);margin:6px 0;">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
           <span>สำรองข้อมูลเป็นไฟล์ (.json)</span>
           <div style="display:flex;gap:8px;">
             <button class="btn-sm" onclick="app.exportJSON()">ดาวน์โหลด .json</button>
@@ -1081,11 +1312,27 @@
 
     const FONT_MAP = {
       default: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      mono: "'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace",
-      space: "'Space Grotesk', 'Segoe UI', sans-serif",
-      tall: "'Oswald', 'Impact', 'Arial Narrow', sans-serif",
-      cyber: "'Orbitron', 'Courier New', monospace",
-      serif: "Georgia, 'Times New Roman', serif"
+      chakra: "'Chakra Petch', 'Segoe UI', sans-serif",
+      bebas: "'Bebas Neue', 'Impact', 'Arial Narrow', sans-serif",
+      syne: "'Syne', 'Segoe UI', sans-serif",
+      outfit: "'Outfit', 'Segoe UI', sans-serif",
+      cinzel: "'Cinzel', Georgia, serif"
+    };
+
+    // รายการฉายาปลดล็อกได้สไตล์ Nano Machine มารสวรรค์
+    const TITLES_CATALOG = [
+      { id: 't_nano', name: 'ผู้สืบทอดนาโน', cond: () => true },
+      { id: 't_scholar', name: 'นักปราชญ์พรรคมาร', cond: (h) => h.INT >= 25 },
+      { id: 't_iron', name: 'กายามารเหล็กไหล', cond: (h) => h.STR >= 25 },
+      { id: 't_lord', name: 'ประมุขพรรคมาร', cond: (h) => h.level >= 5 },
+      { id: 't_emperor', name: 'จักรพรรดิมารสวรรค์', cond: (h) => h.level >= 15 }
+    ];
+
+    const STAT_NAMES_TH = {
+      INT: 'ปัญญา',
+      STR: 'กายามาร',
+      VIT: 'จิตมาร',
+      AGI: 'วิชาตัวเบา'
     };
 
     const app = {
@@ -1096,6 +1343,7 @@
         remainingSec: 25 * 60,
         endTime: null,
         activeTaskTitle: '',
+        activeTaskCat: '#ff9f0a',
         focusMode: false,
         settings: {
           focus: 25,
@@ -1108,16 +1356,26 @@
           smoothTick: true,
           fontKey: 'default'
         },
+        hunter: {
+          level: 1,
+          exp: 0,
+          INT: 10,
+          STR: 10,
+          VIT: 10,
+          AGI: 10,
+          equippedTitle: 'ผู้สืบทอดนาโน',
+          dailyClaimedDate: ''
+        },
         tasks: [],
         stats: { history: {} },
         updatedAt: 0
       },
-      lastRenderedDigits: ['0', '2', '5', '0', '0'],
       calDate: new Date(),
       statsDate: new Date(),
       selectedDateKey: '',
       timerInterval: null,
       cursorTimeout: null,
+      toastTimeout: null,
       cloud: { url: '', key: '' },
 
       init() {
@@ -1130,7 +1388,9 @@
         this.renderCalendar();
         this.renderTasks();
         this.renderStats();
+        this.renderCultivation();
 
+        // ซ่อนเคอร์เซอร์อัตโนมัติในโหมดโฟกัสหลังไม่ขยับเมาส์ 2 วินาที
         const wakeCursor = () => {
           if (!this.state.focusMode) return;
           document.body.classList.remove('hide-cursor');
@@ -1142,6 +1402,7 @@
         window.addEventListener('mousemove', wakeCursor);
         window.addEventListener('touchstart', wakeCursor);
 
+        // คีย์ลัด: Space, R, F, Esc
         window.addEventListener('keydown', (e) => {
           if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
           if (e.code === 'Space') { e.preventDefault(); this.toggleTimer(); }
@@ -1153,10 +1414,209 @@
           }
         });
 
+        // ซิงก์ข้อมูลจาก Firebase Cloud อัตโนมัติทุก 12 วินาทีและเมื่อสลับกลับมาเปิดหน้าจอ
         setInterval(() => this.pullFromCloud(false), 12000);
         window.addEventListener('focus', () => this.pullFromCloud(false));
       },
 
+      /* ==================== NANO MACHINE HEAVENLY DEMON ENGINE ==================== */
+      getRealmInfo(lv) {
+        if (lv >= 30) return { title: 'มารสวรรค์', realm: 'บรรลุนิรันดร์', supreme: true };
+        if (lv >= 20) return { title: 'รองประมุข', realm: 'ไร้เทียมทาน', supreme: true };
+        if (lv >= 15) return { title: 'เจ้าตำหนัก', realm: 'เหนือมนุษย์', supreme: false };
+        if (lv >= 10) return { title: 'ผู้อาวุโส', realm: 'ขอบเขตสุดยอด', supreme: false };
+        if (lv >= 6)  return { title: 'ศิษย์เอก', realm: 'ปราณแท้จริง', supreme: false };
+        if (lv >= 3)  return { title: 'ศิษย์สายใน', realm: 'ก่อเกิดปราณ', supreme: false };
+        return { title: 'ศิษย์นอกพรรค', realm: 'หลอมรวมปราณ', supreme: false };
+      },
+
+      getQiNeeded(lv) {
+        return 100 + (lv - 1) * 40;
+      },
+
+      gainDemonQi(amount, statKey = 'INT') {
+        const h = this.state.hunter;
+        h.exp += amount;
+        const statGain = Math.max(1, Math.round(amount / 15));
+        if (h[statKey] !== undefined) h[statKey] += statGain;
+        h.AGI += 1;
+
+        let leveledUp = false;
+        while (h.exp >= this.getQiNeeded(h.level)) {
+          h.exp -= this.getQiNeeded(h.level);
+          h.level += 1;
+          h.VIT += 2;
+          leveledUp = true;
+        }
+
+        this.saveData();
+        this.renderCultivation();
+
+        const statTh = STAT_NAMES_TH[statKey] || statKey;
+        if (leveledUp) {
+          const info = this.getRealmInfo(h.level);
+          this.showSystemToast(`ทะลวงขอบเขต! → ขั้น ${h.level}`, `${info.title} (${info.realm}) | ${statTh} +${statGain}`);
+        } else {
+          this.showSystemToast(`ปราณมารเพิ่มขึ้น +${amount}`, `${statTh} +${statGain} | วิชาตัวเบา +1`);
+        }
+      },
+
+      showSystemToast(title, sub) {
+        const toast = document.getElementById('levelUpToast');
+        document.getElementById('toastTitle').textContent = title;
+        document.getElementById('toastSub').textContent = sub;
+        toast.classList.add('show');
+        clearTimeout(this.toastTimeout);
+        this.toastTimeout = setTimeout(() => toast.classList.remove('show'), 3200);
+      },
+
+      equipTitle(name) {
+        this.state.hunter.equippedTitle = name;
+        this.saveData();
+        this.renderCultivation();
+      },
+
+      claimDailyQuest() {
+        const today = this.toDateKey(new Date());
+        if (this.state.hunter.dailyClaimedDate === today) return;
+        this.state.hunter.dailyClaimedDate = today;
+        this.gainDemonQi(120, 'VIT');
+      },
+
+      renderCultivation() {
+        const h = this.state.hunter;
+        if (!h.equippedTitle) h.equippedTitle = 'ผู้สืบทอดนาโน';
+        const info = this.getRealmInfo(h.level);
+        const need = this.getQiNeeded(h.level);
+        const pct = Math.min(100, Math.round((h.exp / need) * 100));
+
+        // Mini Pill บนหน้าจอหลัก
+        const miniBadge = document.getElementById('miniRealmBadge');
+        miniBadge.textContent = info.title;
+        miniBadge.className = 'realm-badge' + (info.supreme ? ' supreme' : '');
+        document.getElementById('miniLevelText').textContent = `ขั้น ${h.level}`;
+        document.getElementById('miniQiFill').style.width = `${pct}%`;
+        document.getElementById('miniTitleText').textContent = `ฉายา: ${h.equippedTitle}`;
+
+        // หน้าต่างคัมภีร์มาร
+        document.getElementById('winRealmTitle').textContent = info.title;
+        const winBadge = document.getElementById('winRealmBadge');
+        winBadge.textContent = info.realm;
+        winBadge.className = 'realm-badge' + (info.supreme ? ' supreme' : '');
+        document.getElementById('winLevelNum').textContent = h.level;
+        document.getElementById('winQiText').textContent = `${h.exp} / ${need} ปราณมาร`;
+        document.getElementById('winQiFill').style.width = `${pct}%`;
+
+        const cp = (h.INT + h.STR + h.VIT + h.AGI) * 12 + h.level * 50;
+        document.getElementById('winTotalPower').textContent = `พลังปราณมาร: ${cp.toLocaleString()}`;
+
+        const maxStat = Math.max(50, h.INT, h.STR, h.VIT, h.AGI);
+        ['INT', 'STR', 'VIT', 'AGI'].forEach(k => {
+          document.getElementById(`val${k}`).textContent = h[k];
+          document.getElementById(`bar${k}`).style.width = `${Math.min(100, (h[k] / maxStat) * 100)}%`;
+        });
+
+        this.drawRadarChart(h, maxStat);
+
+        // Daily Quest
+        const today = this.toDateKey(new Date());
+        const todayMin = this.state.stats.history[today] || 0;
+        const todayTasks = this.state.tasks.filter(t => this.isTaskOnDate(t, today));
+        const doneCount = todayTasks.filter(t => (t.doneDates || []).includes(today)).length;
+        const questReady = todayMin >= 25 || (todayTasks.length > 0 && doneCount === todayTasks.length);
+        const alreadyClaimed = h.dailyClaimedDate === today;
+
+        const qList = document.getElementById('dailyQuestList');
+        qList.innerHTML = `
+          <div style="display:flex;justify-content:space-between;">
+            <span>• โฟกัสอย่างน้อย 25 นาทีวันนี้</span>
+            <span style="color:${todayMin >= 25 ? '#c084fc' : '#8e8e98'}">${todayMin}/25 นาที</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;">
+            <span>• เคลียร์ตารางปฏิทินวันนี้</span>
+            <span style="color:${todayTasks.length > 0 && doneCount === todayTasks.length ? '#c084fc' : '#8e8e98'}">${doneCount}/${todayTasks.length} งาน</span>
+          </div>
+          <div style="margin-top:6px;">
+            ${alreadyClaimed
+              ? `<div style="color:#c084fc;font-size:12px;">✅ รับรางวัล Daily Quest วันนี้แล้ว (+120 ปราณมาร)</div>`
+              : `<button class="btn-nano" style="width:100%;opacity:${questReady ? 1 : 0.45}" ${questReady ? '' : 'disabled'} onclick="app.claimDailyQuest()">
+                  ${questReady ? '⚡ รับรางวัลภารกิจรายวัน (+120 ปราณมาร)' : 'ทำภารกิจให้สำเร็จเพื่อรับรางวัล'}
+                </button>`
+            }
+          </div>
+        `;
+
+        // Titles
+        const tList = document.getElementById('titleList');
+        tList.innerHTML = '';
+        TITLES_CATALOG.forEach(t => {
+          const unlocked = t.cond(h);
+          const equipped = h.equippedTitle === t.name;
+          const chip = document.createElement('span');
+          chip.className = 'title-chip' + (!unlocked ? ' locked' : '') + (equipped ? ' equipped' : '');
+          chip.textContent = unlocked ? (equipped ? `★ ${t.name}` : t.name) : `🔒 ${t.name}`;
+          if (unlocked) chip.onclick = () => this.equipTitle(t.name);
+          tList.appendChild(chip);
+        });
+      },
+
+      drawRadarChart(h, maxVal) {
+        const cx = 120, cy = 95, r = 64;
+        const norm = (v) => Math.max(0.15, Math.min(1, v / maxVal)) * r;
+        const pTop = `${cx},${cy - norm(h.INT)}`;
+        const pRight = `${cx + norm(h.STR)},${cy}`;
+        const pBottom = `${cx},${cy + norm(h.VIT)}`;
+        const pLeft = `${cx - norm(h.AGI)},${cy}`;
+
+        document.getElementById('radarContainer').innerHTML = `
+          <svg viewBox="0 0 240 190" width="240" height="190">
+            <polygon points="${cx},${cy-r} ${cx+r},${cy} ${cx},${cy+r} ${cx-r},${cy}" fill="none" stroke="rgba(168,85,247,0.32)" stroke-width="1"/>
+            <polygon points="${cx},${cy-r*0.5} ${cx+r*0.5},${cy} ${cx},${cy+r*0.5} ${cx-r*0.5},${cy}" fill="none" stroke="rgba(192,132,252,0.18)" stroke-width="1"/>
+            <line x1="${cx}" y1="${cy-r}" x2="${cx}" y2="${cy+r}" stroke="rgba(168,85,247,0.22)"/>
+            <line x1="${cx-r}" y1="${cy}" x2="${cx+r}" y2="${cy}" stroke="rgba(168,85,247,0.22)"/>
+            <polygon points="${pTop} ${pRight} ${pBottom} ${pLeft}" fill="rgba(168,85,247,0.34)" stroke="#c084fc" stroke-width="2"/>
+            <text x="${cx}" y="18" fill="#c084fc" font-size="11" font-weight="700" text-anchor="middle">ปัญญา</text>
+            <text x="${cx+r+28}" y="${cy+4}" fill="#a855f7" font-size="11" font-weight="700" text-anchor="middle">กายามาร</text>
+            <text x="${cx}" y="${cy+r+16}" fill="#8b5cf6" font-size="11" font-weight="700" text-anchor="middle">จิตมาร</text>
+            <text x="${cx-r-28}" y="${cy+4}" fill="#e879f9" font-size="11" font-weight="700" text-anchor="middle">ตัวเบา</text>
+          </svg>
+        `;
+      },
+
+      /* ==================== SMOOTH TEMPLE BELL / SINGING BOWL AUDIO ==================== */
+      playSmoothChime() {
+        try {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioCtx();
+          const now = ctx.currentTime;
+
+          // โทนเสียงอบอุ่นย่านต่ำ-กลาง (C4 261.6Hz + G4 392Hz + C5 523.25Hz) นุ่มลึกไม่แสบหู
+          const freqs = [261.63, 392.00, 523.25];
+          const gains = [0.055, 0.035, 0.022];
+
+          freqs.forEach((f, idx) => {
+            const osc = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(f, now);
+
+            gainNode.gain.setValueAtTime(0.0001, now);
+            gainNode.gain.linearRampToValueAtTime(gains[idx], now + 0.09);
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 2.2);
+
+            osc.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            osc.start(now);
+            osc.stop(now + 2.25);
+          });
+
+          setTimeout(() => {
+            if (ctx.state !== 'closed') ctx.close().catch(() => {});
+          }, 2400);
+        } catch (e) {}
+      },
+
+      /* ==================== TIMER & FONT ENGINE ==================== */
       setFont(fontKey) {
         if (!FONT_MAP[fontKey]) fontKey = 'default';
         this.state.settings.fontKey = fontKey;
@@ -1167,8 +1627,6 @@
       applyFontToDOM(fontKey) {
         document.documentElement.style.setProperty('--timer-font', FONT_MAP[fontKey] || FONT_MAP.default);
         document.body.setAttribute('data-font', fontKey);
-        const sel = document.getElementById('quickFontSelect');
-        if (sel) sel.value = fontKey;
         document.querySelectorAll('#fontPickerGrid .font-card').forEach(card => {
           card.classList.toggle('active', card.getAttribute('data-font') === fontKey);
         });
@@ -1196,7 +1654,6 @@
         const { full, digits } = this.formatTimeParts(this.state.remainingSec);
         document.title = `${full} - Lock In Timer`;
 
-        // อัปเดตเฉพาะหลักที่เปลี่ยนในช่องความกว้างคงที่ ทำให้หลักอื่นนิ่งสนิท 100%
         for (let i = 0; i < 5; i++) {
           const el = document.getElementById(`d${i}`);
           if (!el) continue;
@@ -1204,12 +1661,11 @@
             el.textContent = digits[i];
             if (this.state.settings.smoothTick !== false && this.state.running) {
               el.classList.remove('smooth-change');
-              void el.offsetWidth; // Reflow สำหรับเล่นแอนิเมชันสมูทใหม่เฉพาะหลักที่เปลี่ยน
+              void el.offsetWidth;
               el.classList.add('smooth-change');
             }
           }
         }
-        this.lastRenderedDigits = digits;
 
         const maxR = this.state.settings.maxRounds || 4;
         const dotsEl = document.getElementById('pomoDots');
@@ -1236,7 +1692,7 @@
           const map = ['focus', 'short', 'long', 'custom'];
           btn.classList.toggle('active', map[idx] === phase);
         });
-        document.getElementById('statusLabel').textContent = this.state.activeTaskTitle ? `กำลังโฟกัส: ${this.state.activeTaskTitle}` : 'พร้อมเริ่ม';
+        document.getElementById('statusLabel').textContent = this.state.activeTaskTitle ? `ภารกิจ: ${this.state.activeTaskTitle}` : 'พร้อมเริ่ม';
         this.updateDisplay();
       },
 
@@ -1251,7 +1707,7 @@
         const btn = document.getElementById('startBtn');
         btn.textContent = 'หยุดชั่วคราว';
         btn.classList.add('running');
-        document.getElementById('statusLabel').textContent = this.state.activeTaskTitle ? `กำลังลุย: ${this.state.activeTaskTitle}` : 'กำลังโฟกัส...';
+        document.getElementById('statusLabel').textContent = this.state.activeTaskTitle ? `กำลังฝึก: ${this.state.activeTaskTitle}` : 'กำลังโฟกัส...';
 
         clearInterval(this.timerInterval);
         this.timerInterval = setInterval(() => {
@@ -1280,13 +1736,18 @@
         this.setPhase(this.state.phase, true);
       },
 
+      // กดข้ามจะเงียบสนิท 100%
       skipPhase() {
         this.completeSession(true);
       },
 
       completeSession(skipped = false) {
         this.pauseTimer();
-        if (this.state.settings.sound) this.beep();
+
+        // เล่นเสียงระฆังนุ่มลึกเฉพาะเมื่อนับครบเวลาจริงเท่านั้น
+        if (!skipped && this.state.settings.sound) {
+          this.playSmoothChime();
+        }
 
         if (!skipped && (this.state.phase === 'focus' || this.state.phase === 'custom')) {
           const earnedMin = this.state.phase === 'custom'
@@ -1294,6 +1755,16 @@
             : (this.state.settings.focus || 25);
           const today = this.toDateKey(new Date());
           this.state.stats.history[today] = (this.state.stats.history[today] || 0) + earnedMin;
+
+          const catToStat = {
+            '#ff9f0a': 'INT', '#f5c542': 'INT',
+            '#30d158': 'STR', '#ff2a55': 'STR',
+            '#0a84ff': 'VIT', '#ff7b00': 'VIT',
+            '#a855f7': 'AGI', '#bf5af2': 'AGI'
+          };
+          const statKey = catToStat[this.state.activeTaskCat] || 'INT';
+          this.gainDemonQi(earnedMin * 2, statKey);
+
           this.saveData();
           this.renderStats();
         }
@@ -1316,20 +1787,6 @@
         }
       },
 
-      beep() {
-        try {
-          const ctx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.frequency.value = 880;
-          gain.gain.value = 0.16;
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.start();
-          setTimeout(() => { osc.stop(); ctx.close(); }, 380);
-        } catch (e) {}
-      },
-
       toggleFocusMode() {
         this.state.focusMode = !this.state.focusMode;
         document.body.classList.toggle('pure-focus', this.state.focusMode);
@@ -1345,6 +1802,7 @@
         }
       },
 
+      /* ==================== SETTINGS ==================== */
       syncSettingsToInputs() {
         const s = this.state.settings;
         const cSec = s.customSec || 1500;
@@ -1396,7 +1854,7 @@
         this.closeModals();
       },
 
-      /* Monthly Line Chart Statistics */
+      /* ==================== MONTHLY LINE CHART STATISTICS ==================== */
       changeStatsMonth(offset) {
         this.statsDate.setMonth(this.statsDate.getMonth() + offset);
         this.renderStats();
@@ -1459,15 +1917,15 @@
           const v = Math.round((maxVal / 4) * step);
           const yPos = getY(v).toFixed(1);
           gridLines += `
-            <line x1="${padL}" y1="${yPos}" x2="${width - padR}" y2="${yPos}" stroke="#23232c" stroke-dasharray="3,3" stroke-width="1"/>
-            <text x="${padL - 8}" y="${Number(yPos) + 4}" fill="#6e6e77" font-size="10" text-anchor="end">${v}</text>
+            <line x1="${padL}" y1="${yPos}" x2="${width - padR}" y2="${yPos}" stroke="#261e3b" stroke-dasharray="3,3" stroke-width="1"/>
+            <text x="${padL - 8}" y="${Number(yPos) + 4}" fill="#7c7394" font-size="10" text-anchor="end">${v}</text>
           `;
         }
 
         let xLabels = '';
         data.forEach((d, i) => {
           if (d.day === 1 || d.day % 5 === 0 || d.day === data.length) {
-            xLabels += `<text x="${getX(i).toFixed(1)}" y="${height - 8}" fill="#8e8e93" font-size="10" text-anchor="middle">${d.day}</text>`;
+            xLabels += `<text x="${getX(i).toFixed(1)}" y="${height - 8}" fill="#8e8e98" font-size="10" text-anchor="middle">${d.day}</text>`;
           }
         });
 
@@ -1476,9 +1934,9 @@
           const cx = getX(i).toFixed(1);
           const cy = getY(d.mins).toFixed(1);
           const r = d.mins > 0 ? 4.5 : 2.5;
-          const fill = d.mins > 0 ? '#ff9f0a' : '#3a3a44';
+          const fill = d.mins > 0 ? '#c084fc' : '#3a2e54';
           circles += `
-            <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="#0b0b0e" stroke-width="1.5" style="cursor:pointer"
+            <circle cx="${cx}" cy="${cy}" r="${r}" fill="${fill}" stroke="#0a0810" stroke-width="1.5" style="cursor:pointer"
               onmouseenter="document.getElementById('chartHoverInfo').textContent='วันที่ ${d.dateKey}: โฟกัส ${d.mins} นาที'" />
           `;
         });
@@ -1487,20 +1945,20 @@
           <svg viewBox="0 0 ${width} ${height}" width="100%" height="100%" preserveAspectRatio="none">
             <defs>
               <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#ff9f0a" stop-opacity="0.38"/>
-                <stop offset="100%" stop-color="#ff9f0a" stop-opacity="0.0"/>
+                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0.0"/>
               </linearGradient>
             </defs>
             ${gridLines}
             <polygon points="${areaPoints}" fill="url(#lineGrad)" />
-            <polyline fill="none" stroke="#ff9f0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+            <polyline fill="none" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
             ${circles}
             ${xLabels}
           </svg>
         `;
       },
 
-      /* Calendar & Tasks */
+      /* ==================== LONG-TERM CALENDAR & TASKS ==================== */
       changeCalMonth(offset) {
         this.calDate.setMonth(this.calDate.getMonth() + offset);
         this.renderCalendar();
@@ -1579,22 +2037,29 @@
 
         tasks.forEach(t => {
           const isDone = (t.doneDates || []).includes(this.selectedDateKey);
+          const safeTitle = this.escapeHtml(t.title);
           const item = document.createElement('div');
           item.className = 'task-item' + (isDone ? ' done' : '');
           item.innerHTML = `
             <div style="display:flex;align-items:center;gap:10px;flex:1;">
               <input type="checkbox" ${isDone ? 'checked' : ''} onchange="app.toggleTaskDone('${t.id}')">
               <span style="width:8px;height:8px;border-radius:50%;background:${t.cat};flex-shrink:0;"></span>
-              <span style="font-size:12px;color:#8e8e93;">${t.time}</span>
-              <span class="task-title" style="font-size:13px;">${t.title}</span>
+              <span style="font-size:12px;color:#8e8e98;">${t.time}</span>
+              <span class="task-title" style="font-size:13px;">${safeTitle}</span>
             </div>
             <div style="display:flex;gap:6px;">
-              <button class="btn-sm" onclick="app.focusOnTask('${t.title.replace(/'/g, "\\'")}')">โฟกัส</button>
+              <button class="btn-sm" onclick="app.focusOnTask('${t.id}')">ฝึกภารกิจ</button>
               <button class="btn-sm" style="color:var(--danger);" onclick="app.deleteTask('${t.id}')">ลบ</button>
             </div>
           `;
           list.appendChild(item);
         });
+      },
+
+      escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
       },
 
       addTask() {
@@ -1621,8 +2086,18 @@
         if (!t) return;
         t.doneDates = t.doneDates || [];
         const idx = t.doneDates.indexOf(this.selectedDateKey);
-        if (idx >= 0) t.doneDates.splice(idx, 1);
-        else t.doneDates.push(this.selectedDateKey);
+        if (idx >= 0) {
+          t.doneDates.splice(idx, 1);
+        } else {
+          t.doneDates.push(this.selectedDateKey);
+          const catToStat = {
+            '#ff9f0a': 'INT', '#f5c542': 'INT',
+            '#30d158': 'STR', '#ff2a55': 'STR',
+            '#0a84ff': 'VIT', '#ff7b00': 'VIT',
+            '#a855f7': 'AGI', '#bf5af2': 'AGI'
+          };
+          this.gainDemonQi(25, catToStat[t.cat] || 'VIT');
+        }
         this.saveData();
         this.renderTasks();
       },
@@ -1634,10 +2109,12 @@
         this.renderTasks();
       },
 
-      focusOnTask(title) {
-        this.state.activeTaskTitle = title;
-        document.getElementById('bannerText').textContent = `ภารกิจปัจจุบัน: ${title}`;
-        document.getElementById('statusLabel').textContent = `กำลังโฟกัส: ${title}`;
+      focusOnTask(id) {
+        const t = this.state.tasks.find(x => x.id === id);
+        if (!t) return;
+        this.state.activeTaskTitle = t.title;
+        this.state.activeTaskCat = t.cat || '#ff9f0a';
+        document.getElementById('statusLabel').textContent = `ภารกิจ: ${t.title}`;
         this.closeModals();
       },
 
@@ -1645,6 +2122,7 @@
         this.closeModals();
         if (name === 'settings') this.syncSettingsToInputs();
         if (name === 'stats') this.renderStats();
+        if (name === 'status') this.renderCultivation();
         document.getElementById(`modal-${name}`).classList.add('open');
       },
 
@@ -1652,7 +2130,11 @@
         document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.remove('open'));
       },
 
-      /* Storage & Cloud Sync */
+      closeOnBackdrop(e) {
+        if (e.target.classList.contains('modal-backdrop')) this.closeModals();
+      },
+
+      /* ==================== STORAGE & FIREBASE CLOUD SYNC ==================== */
       saveData() {
         this.state.updatedAt = Date.now();
         this.saveLocal();
@@ -1662,19 +2144,23 @@
       saveLocal() {
         const payload = {
           settings: this.state.settings,
+          hunter: this.state.hunter,
           tasks: this.state.tasks,
           stats: this.state.stats,
           updatedAt: this.state.updatedAt
         };
-        localStorage.setItem('lockin_data_v2', JSON.stringify(payload));
+        try {
+          localStorage.setItem('lockin_data_v3', JSON.stringify(payload));
+        } catch (e) {}
       },
 
       loadLocal() {
         try {
-          const raw = localStorage.getItem('lockin_data_v2');
+          const raw = localStorage.getItem('lockin_data_v3') || localStorage.getItem('lockin_data_v2');
           if (!raw) return;
           const data = JSON.parse(raw);
           if (data.settings) this.state.settings = { ...this.state.settings, ...data.settings };
+          if (data.hunter) this.state.hunter = { ...this.state.hunter, ...data.hunter };
           if (data.tasks) this.state.tasks = data.tasks;
           if (data.stats) this.state.stats = data.stats;
           if (data.updatedAt) this.state.updatedAt = data.updatedAt;
@@ -1722,6 +2208,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               settings: this.state.settings,
+              hunter: this.state.hunter,
               tasks: this.state.tasks,
               stats: this.state.stats,
               updatedAt: this.state.updatedAt
@@ -1749,6 +2236,7 @@
 
           if ((remote.updatedAt || 0) > (this.state.updatedAt || 0)) {
             this.state.settings = { ...this.state.settings, ...(remote.settings || {}) };
+            this.state.hunter = { ...this.state.hunter, ...(remote.hunter || {}) };
             this.state.tasks = remote.tasks || [];
             this.state.stats = remote.stats || { history: {} };
             this.state.updatedAt = remote.updatedAt;
@@ -1757,6 +2245,7 @@
             this.renderCalendar();
             this.renderTasks();
             this.renderStats();
+            this.renderCultivation();
           } else if ((this.state.updatedAt || 0) > (remote.updatedAt || 0)) {
             await this.pushToCloud();
           }
@@ -1769,10 +2258,10 @@
       },
 
       exportJSON() {
-        const blob = new Blob([localStorage.getItem('lockin_data_v2') || '{}'], { type: 'application/json' });
+        const blob = new Blob([localStorage.getItem('lockin_data_v3') || '{}'], { type: 'application/json' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `lockin-backup-${this.toDateKey(new Date())}.json`;
+        a.download = `lockin-nano-demon-backup-${this.toDateKey(new Date())}.json`;
         a.click();
       },
 
@@ -1784,6 +2273,7 @@
           try {
             const data = JSON.parse(reader.result);
             this.state.settings = { ...this.state.settings, ...(data.settings || {}) };
+            this.state.hunter = { ...this.state.hunter, ...(data.hunter || {}) };
             this.state.tasks = data.tasks || [];
             this.state.stats = data.stats || { history: {} };
             this.saveData();
@@ -1791,6 +2281,7 @@
             this.renderCalendar();
             this.renderTasks();
             this.renderStats();
+            this.renderCultivation();
             this.closeModals();
           } catch (err) {}
         };
