@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -89,7 +88,7 @@
       justify-content: space-between;
     }
 
-    /* ==================== 1. TOP BAR (CLEAN FOR STYLE 2) ==================== */
+    /* ==================== 1. TOP BAR ==================== */
     .top-bar {
       width: 100%;
       display: flex;
@@ -194,7 +193,7 @@
       transform: translateY(0) scale(1);
     }
 
-    /* ==================== 2.5 BOTTOM GLASS DOCK & MINI TIMER (STYLE 2) ==================== */
+    /* ==================== 2.5 BOTTOM GLASS DOCK & MINI TIMER ==================== */
     .bottom-dock-wrap {
       position: fixed;
       bottom: 18px;
@@ -414,7 +413,6 @@
       flex-wrap: wrap;
     }
 
-    /* กล่องนับถอยหลัง "เฉพาะวัน" ขนาดใหญ่เท่ากันทุกใบ */
     .day-counter-hero {
       background: rgba(8, 5, 16, 0.88);
       border: 1px solid rgba(192, 132, 252, 0.42);
@@ -590,7 +588,7 @@
       color: #ffffff;
       background: rgba(34, 22, 58, 0.95);
       border-color: var(--pill-color, var(--nano-purple));
-      box-shadow: 0 0 12px color-mix(in srgb, var(--pill-color, #a855f7) 35%, transparent);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
     }
     .cat-pill-dot {
       width: 7px;
@@ -720,19 +718,6 @@
       border-color: var(--nano-purple);
       box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.18);
       background: rgba(18, 13, 32, 0.96);
-    }
-    select.input {
-      appearance: none;
-      -webkit-appearance: none;
-      padding-right: 30px;
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23c084fc' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-    }
-    select.input option {
-      background: #120d1f;
-      color: #f3eefc;
     }
 
     .task-list {
@@ -960,7 +945,7 @@
       pointer-events: auto;
     }
 
-    /* ==================== 6. FULL-SCREEN BIG GOAL COUNTDOWN (DAYS ONLY) ==================== */
+    /* ==================== 6. FULL-SCREEN BIG GOAL COUNTDOWN ==================== */
     .goal-fullscreen-overlay {
       position: fixed;
       inset: 0;
@@ -1360,7 +1345,7 @@
   </div>
 
   <div class="app-shell">
-    <!-- Top Bar (Clean Style 2) -->
+    <!-- Top Bar -->
     <header class="top-bar">
       <div class="brand" onclick="app.switchView('calendar')">
         <div class="brand-icon"></div>
@@ -1376,7 +1361,6 @@
     <div class="views-stage">
       <!-- ==================== VIEW 1: CALENDAR HOME SCREEN ==================== -->
       <section id="view-calendar" class="view-section active">
-        <!-- Equal-Sized Big Goal Countdown Cards (Days Only) -->
         <div id="bigGoalBannerContainer"></div>
 
         <div class="home-planner-grid">
@@ -1509,7 +1493,7 @@
       </section>
     </div>
 
-    <!-- Bottom Glass Dock + Floating Mini Timer (Style 2) -->
+    <!-- Bottom Glass Dock + Floating Mini Timer -->
     <div class="bottom-dock-wrap">
       <nav class="bottom-dock">
         <button id="dock-calendar" class="dock-btn active" onclick="app.switchView('calendar')">
@@ -1541,7 +1525,7 @@
 
   <button class="focus-exit-btn" onclick="app.toggleFocusMode()">ออกจากโหมดโฟกัส (Esc / F)</button>
 
-  <!-- Modal: คัมภีร์มาร (Nano Machine Heavenly Demon Status) -->
+  <!-- Modal: คัมภีร์มาร -->
   <div id="modal-status" class="modal-backdrop" onclick="app.closeOnBackdrop(event)">
     <div class="modal-card nano-window">
       <div class="nano-header">
@@ -1863,9 +1847,69 @@
       toastTimeout: null,
       cloud: { url: '', key: '' },
 
+      sanitizeState() {
+        const today = this.toDateKey(new Date());
+        if (!this.state.settings || typeof this.state.settings !== 'object') {
+          this.state.settings = {};
+        }
+        this.state.settings = {
+          focus: 25,
+          short: 5,
+          long: 15,
+          maxRounds: 4,
+          customSec: 25 * 60,
+          autoStart: false,
+          sound: true,
+          smoothTick: true,
+          fontKey: 'default',
+          ...this.state.settings
+        };
+
+        if (!this.state.hunter || typeof this.state.hunter !== 'object') {
+          this.state.hunter = {};
+        }
+        this.state.hunter = {
+          level: 1,
+          exp: 0,
+          INT: 10,
+          STR: 10,
+          VIT: 10,
+          AGI: 10,
+          equippedTitle: 'ผู้สืบทอดนาโน',
+          dailyClaimedDate: '',
+          ...this.state.hunter
+        };
+
+        let rawTasks = this.state.tasks;
+        if (rawTasks && !Array.isArray(rawTasks) && typeof rawTasks === 'object') {
+          rawTasks = Object.values(rawTasks);
+        }
+        if (!Array.isArray(rawTasks)) rawTasks = [];
+        this.state.tasks = rawTasks
+          .filter(t => t && typeof t === 'object')
+          .map((t, idx) => ({
+            id: String(t.id || ('t_' + Date.now() + '_' + idx)),
+            title: String(t.title || 'ไม่มีชื่อรายการ'),
+            time: String(t.time || '09:00'),
+            cat: String(t.cat || '#ff9f0a'),
+            repeat: String(t.repeat || 'none'),
+            customDays: Array.isArray(t.customDays) ? t.customDays : undefined,
+            dateKey: (typeof t.dateKey === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(t.dateKey)) ? t.dateKey : today,
+            doneDates: Array.isArray(t.doneDates) ? t.doneDates : []
+          }));
+
+        if (!this.state.stats || typeof this.state.stats !== 'object') {
+          this.state.stats = { history: {} };
+        }
+        if (!this.state.stats.history || typeof this.state.stats.history !== 'object') {
+          this.state.stats.history = {};
+        }
+      },
+
       init() {
         this.selectedDateKey = this.toDateKey(new Date());
         this.loadLocal();
+        this.sanitizeState();
         this.loadCloudConfig();
         this.applyFontToDOM(this.state.settings.fontKey || 'default');
         this.syncSettingsToInputs();
@@ -1910,7 +1954,7 @@
         window.addEventListener('focus', () => this.pullFromCloud(false));
       },
 
-      /* ==================== VIEW SWITCHING (STYLE 2) ==================== */
+      /* ==================== VIEW SWITCHING ==================== */
       updateMiniTimerVisibility() {
         const cap = document.getElementById('miniTimerCapsule');
         if (!cap) return;
@@ -1919,8 +1963,10 @@
 
       switchView(viewName) {
         this.state.currentView = viewName;
-        document.getElementById('view-calendar').classList.toggle('active', viewName === 'calendar');
-        document.getElementById('view-timer').classList.toggle('active', viewName === 'timer');
+        const vCal = document.getElementById('view-calendar');
+        const vTim = document.getElementById('view-timer');
+        if (vCal) vCal.classList.toggle('active', viewName === 'calendar');
+        if (vTim) vTim.classList.toggle('active', viewName === 'timer');
 
         const dCal = document.getElementById('dock-calendar');
         const dTim = document.getElementById('dock-timer');
@@ -1950,14 +1996,14 @@
       getBigGoals() {
         return this.state.tasks
           .filter(t => this.isBigGoal(t) && !this.isBigGoalCompleted(t))
-          .sort((a, b) => a.dateKey.localeCompare(b.dateKey));
+          .sort((a, b) => String(a.dateKey || '').localeCompare(String(b.dateKey || '')));
       },
 
       calcDaysRemaining(dateKey) {
         const now = new Date();
         const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const [y, m, d] = dateKey.split('-').map(Number);
-        const targetStart = new Date(y, m - 1, d);
+        const [y, m, d] = String(dateKey || this.toDateKey(now)).split('-').map(Number);
+        const targetStart = new Date(y, (m || 1) - 1, d || 1);
         const diffDays = Math.round((targetStart - todayStart) / 86400000);
         if (diffDays > 0) return { num: String(diffDays), label: 'วันที่เหลือ' };
         if (diffDays === 0) return { num: '0', label: 'ถึงกำหนดวันนี้' };
@@ -1965,8 +2011,8 @@
       },
 
       formatThaiDate(dateKey) {
-        const [y, m, d] = dateKey.split('-').map(Number);
-        return `${d} ${thaiMonths[m - 1]} ${y}`;
+        const [y, m, d] = String(dateKey || this.toDateKey(new Date())).split('-').map(Number);
+        return `${d} ${thaiMonths[(m || 1) - 1]} ${y}`;
       },
 
       renderBigGoalBanner(enteringId = null) {
@@ -2029,7 +2075,8 @@
 
       focusBigGoalInput() {
         this.selectTaskCategory('#a855f7');
-        document.getElementById('taskTitle').focus();
+        const input = document.getElementById('taskTitle');
+        if (input) input.focus();
       },
 
       selectTaskCategory(val) {
@@ -2515,30 +2562,4 @@
         const m = Math.max(0, parseInt(document.getElementById('customMins').value) || 0);
         const s = Math.max(0, parseInt(document.getElementById('customSecs').value) || 0);
         this.state.settings.customSec = Math.max(1, h * 3600 + m * 60 + s);
-        this.state.settings.focus = Math.max(1, parseInt(document.getElementById('setFocusMin').value) || 25);
-        this.state.settings.short = Math.max(1, parseInt(document.getElementById('setShortMin').value) || 5);
-        this.state.settings.long = Math.max(1, parseInt(document.getElementById('setLongMin').value) || 15);
-        this.state.settings.maxRounds = Math.max(1, parseInt(document.getElementById('setMaxRounds').value) || 4);
-        this.state.settings.autoStart = document.getElementById('setAutoStart').checked;
-        this.state.settings.sound = document.getElementById('setSoundOn').checked;
-        this.state.settings.smoothTick = document.getElementById('setSmoothTick').checked;
-        this.saveData();
-        this.setPhase(this.state.phase, true);
-        this.closeModals();
-      },
-
-      /* ==================== MONTHLY LINE CHART STATISTICS ==================== */
-      changeStatsMonth(offset) { this.statsDate.setMonth(this.statsDate.getMonth() + offset); this.renderStats(); },
-      resetStatsMonthToday() { this.statsDate = new Date(); this.renderStats(); },
-
-      renderStats() {
-        const y = this.statsDate.getFullYear();
-        const m = this.statsDate.getMonth();
-        document.getElementById('statsMonthTitle').textContent = `${thaiMonths[m]} ${y}`;
-
-        const daysInMonth = new Date(y, m + 1, 0).getDate();
-        const dailyValues = [];
-        let monthTotal = 0, peakMin = 0, activeDays = 0;
-
-        for (let d = 1; d <= daysInMonth; d++) {
-          const key = `${y}-${String(m + 1).padStart(2, '0'
+        this.state.settings.focus = Math.max(1, parseInt(document.getElementById('setFocusMin').value) ||
